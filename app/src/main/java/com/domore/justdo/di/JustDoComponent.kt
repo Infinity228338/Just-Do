@@ -2,6 +2,7 @@ package com.domore.justdo.di
 
 import android.content.Context
 import com.domore.justdo.JustDoApplication
+import com.domore.justdo.di.task.TaskModule
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
 import dagger.BindsInstance
@@ -15,6 +16,8 @@ import javax.inject.Singleton
 @Component(
     modules = [
         AndroidInjectionModule::class,
+        MainModule::class,
+        TaskModule::class
     ]
 )
 interface JustDoComponent : AndroidInjector<JustDoApplication> {
