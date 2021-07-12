@@ -23,7 +23,6 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf=""
         app:layout_constraintStart_toEndOf="@+id/category_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/cities" />

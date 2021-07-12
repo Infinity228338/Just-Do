@@ -8,12 +8,20 @@ import com.domore.justdo.R
 import com.domore.justdo.databinding.FragmentAddTaskBinding
 import com.domore.justdo.ui.base.BaseFragment
 
+const val ARG_CATEGORY_ID = "category_id"
+
 class AddTaskFragment : BaseFragment(R.layout.fragment_add_task) {
 
     private var viewBinding: FragmentAddTaskBinding? = null
 
+    // TODO: Rename and change types of parameters
+    private var categoryId: Long? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
+            categoryId = it.getLong(ARG_CATEGORY_ID)
+        }
     }
 
     override fun onCreateView(
@@ -27,7 +35,11 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task) {
 
     companion object {
         @JvmStatic
-        fun newInstance() =
-            AddTaskFragment()
+        fun newInstance(id: Long) =
+            AddTaskFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(ARG_CATEGORY_ID, id)
+                }
+            }
     }
 }

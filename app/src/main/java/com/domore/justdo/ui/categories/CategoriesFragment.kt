@@ -4,14 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import com.domore.justdo.R
 import com.domore.justdo.databinding.FragmentCategoriesBinding
 import com.domore.justdo.ui.base.BaseFragment
+import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class CategoriesFragment : BaseFragment(R.layout.fragment_categories) {
+class CategoriesFragment : BaseFragment(R.layout.fragment_categories), CategoriesView {
 
 
+    @Inject
+    lateinit var categoriesPresenterFactory: CategoriesPresenterFactory
     private var viewBinding: FragmentCategoriesBinding? = null
+    private val presenter: CategoriesPresenter by moxyPresenter {
+        categoriesPresenterFactory.create()
+    }
+    private var adapter: CategoriesAdapter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -20,7 +30,7 @@ class CategoriesFragment : BaseFragment(R.layout.fragment_categories) {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        activity?.title = getString(R.string.my_productivity)
+        activity?.title = ""
         viewBinding = FragmentCategoriesBinding.inflate(inflater, container, false)
         return viewBinding!!.root
     }
@@ -30,5 +40,26 @@ class CategoriesFragment : BaseFragment(R.layout.fragment_categories) {
         @JvmStatic
         fun newInstance() =
             CategoriesFragment()
+    }
+
+    override fun init() {
+        adapter = CategoriesAdapter(presenter.categoryListPresenter)
+        viewBinding?.rvCat?.also {
+            it.layoutManager = GridLayoutManager(context, 4)
+            it.adapter = adapter
+        }
+    }
+
+    override fun updateList() {
+        adapter?.notifyDataSetChanged()
+    }
+
+    override fun addItemToList(position: Int) {
+        adapter?.notifyItemInserted(position)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewBinding = null
     }
 }

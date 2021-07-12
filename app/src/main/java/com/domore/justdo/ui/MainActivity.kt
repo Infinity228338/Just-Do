@@ -41,7 +41,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
                         true
                     }
                     R.id.app_bar_add -> {
-                        router.navigateTo(JustDoScreensImpl.addTaskScreen())
+                        router.navigateTo(JustDoScreensImpl.categoriesScreen())
                         true
                     }
                     R.id.app_bar_stats -> {
