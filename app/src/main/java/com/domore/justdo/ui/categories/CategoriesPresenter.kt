@@ -22,7 +22,10 @@ class CategoriesPresenter @AssistedInject constructor(
         override fun getCount() = categories.size
 
         override fun bindView(view: CategoriesItemView) {
-            view.bind(categories[view.pos])
+            if (view is CategoriesAddItemView)
+                view.bind(Category(0, "add"))
+            else
+                view.bind(categories[view.pos])
         }
 
     }
@@ -37,11 +40,14 @@ class CategoriesPresenter @AssistedInject constructor(
         loadData()
 
         categoryListPresenter.itemClickListener = { itemView ->
-            val category = categoryListPresenter.categories[itemView.pos]
-            if (itemView.pos == categoryListPresenter.categories.size) {
+            if (categoryListPresenter.categories.size == 0 ||
+                itemView.pos == categoryListPresenter.categories.size
+            ) {
                 router.navigateTo(screens.addCategoryScreen())
-            } else
+            } else {
+                val category = categoryListPresenter.categories[itemView.pos]
                 router.navigateTo(screens.addTaskScreen(category.id))
+            }
         }
     }
 

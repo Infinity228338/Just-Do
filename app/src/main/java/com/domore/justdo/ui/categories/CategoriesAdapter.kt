@@ -51,10 +51,10 @@ class CategoriesAdapter(val presenter: CategoriesListPresenter) :
         }
 
 
-    override fun getItemCount(): Int = presenter.getCount()
+    override fun getItemCount(): Int = presenter.getCount() + 1
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount) {
+        return if (position == itemCount || position == 0) {
             TYPE_FOOTER
         } else {
             TYPE_ITEM
@@ -79,7 +79,7 @@ class CategoriesAdapter(val presenter: CategoriesListPresenter) :
 
         override fun bind(category: Category) {
             binding.categoryAdd.setOnClickListener {
-//                addImageListener.invoke()
+                presenter.itemClickListener?.invoke(this)
             }
         }
 
