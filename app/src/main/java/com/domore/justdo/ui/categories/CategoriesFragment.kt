@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.domore.justdo.R
 import com.domore.justdo.databinding.FragmentCategoriesBinding
 import com.domore.justdo.ui.base.BaseFragment
+import com.domore.justdo.ui.categories.list.CategoriesAdapter
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
@@ -56,6 +57,10 @@ class CategoriesFragment : BaseFragment(R.layout.fragment_categories), Categorie
 
     override fun addItemToList(position: Int) {
         adapter?.notifyItemInserted(position)
+    }
+
+    override fun showDialog() {
+        TODO("Not yet implemented")
     }
 
     override fun onDestroyView() {

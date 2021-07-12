@@ -5,6 +5,9 @@ import com.domore.justdo.data.vo.Category
 import com.domore.justdo.schedulers.Schedulers
 import com.domore.justdo.ui.JustDoScreens
 import com.domore.justdo.ui.JustDoScreensImpl
+import com.domore.justdo.ui.categories.list.CategoriesAddItemView
+import com.domore.justdo.ui.categories.list.CategoriesItemView
+import com.domore.justdo.ui.categories.list.CategoriesListPresenter
 import com.github.terrakok.cicerone.Router
 import dagger.assisted.AssistedInject
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -23,7 +26,7 @@ class CategoriesPresenter @AssistedInject constructor(
 
         override fun bindView(view: CategoriesItemView) {
             if (view is CategoriesAddItemView)
-                view.bind(Category(0, "add"))
+                view.bind(Category(0, "add", null, 0))
             else
                 view.bind(categories[view.pos])
         }
@@ -43,12 +46,16 @@ class CategoriesPresenter @AssistedInject constructor(
             if (categoryListPresenter.categories.size == 0 ||
                 itemView.pos == categoryListPresenter.categories.size
             ) {
-                router.navigateTo(screens.addCategoryScreen())
+                showDialog()
             } else {
                 val category = categoryListPresenter.categories[itemView.pos]
                 router.navigateTo(screens.addTaskScreen(category.id))
             }
         }
+    }
+
+    private fun showDialog() {
+        viewState.showDialog()
     }
 
     private fun loadData() {

@@ -1,4 +1,4 @@
-package com.domore.justdo.ui.categories
+package com.domore.justdo.ui.categories.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,8 +7,8 @@ import androidx.viewbinding.ViewBinding
 import com.domore.justdo.data.vo.Category
 import com.domore.justdo.databinding.CategoryItemAddBinding
 import com.domore.justdo.databinding.CategoryItemBinding
-import com.domore.justdo.ui.categories.CategoriesListPresenter.Companion.TYPE_FOOTER
-import com.domore.justdo.ui.categories.CategoriesListPresenter.Companion.TYPE_ITEM
+import com.domore.justdo.ui.categories.list.CategoriesListPresenter.Companion.TYPE_FOOTER
+import com.domore.justdo.ui.categories.list.CategoriesListPresenter.Companion.TYPE_ITEM
 
 class CategoriesAdapter(val presenter: CategoriesListPresenter) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {

@@ -8,4 +8,5 @@ interface CategoriesView : MvpView {
     fun init()
     fun updateList()
     fun addItemToList(position: Int)
+    fun showDialog()
 }

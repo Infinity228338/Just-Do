@@ -1,4 +1,4 @@
-package com.domore.justdo.ui.categories
+package com.domore.justdo.ui.categories.list
 
 import com.domore.justdo.data.vo.Category
 import com.domore.justdo.ui.base.ItemView
