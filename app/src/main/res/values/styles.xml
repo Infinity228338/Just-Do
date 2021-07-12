@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="HeaderGreenText">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/main_green</item>
+    </style>
+
+    <style name="HeaderGreenText.TwoLInes">
+        <item name="android:lines">2</item>
+        <item name="android:maxLines">2</item>
+    </style>
+</resources>

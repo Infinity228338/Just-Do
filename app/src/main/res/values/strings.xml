@@ -9,4 +9,5 @@
     <string name="current_tasks">Текущие задания</string>
     <string name="my_productivity">Моя продуктивность</string>
     <string name="add_task">Добавить задание</string>
+    <string name="choose_category">Выберите категорию</string>
 </resources>
