@@ -10,4 +10,8 @@
     <string name="my_productivity">Моя продуктивность</string>
     <string name="add_task">Добавить задание</string>
     <string name="choose_category">Выберите категорию</string>
+    <string name="add_category">Добавьте категорию</string>
+    <string name="enter_category_name">Введите название</string>
+    <string name="add_category_icon">Выберите иконку</string>
+    <string name="add_category_color">Выберите цвет</string>
 </resources>
