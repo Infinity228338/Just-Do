@@ -125,4 +125,15 @@
         android:text="@string/add_category_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/icons_table" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_color_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="30dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/choose_color_text"
+        app:spanCount="7"
+        tools:listitem="@layout/color_item_layout" />
 </androidx.constraintlayout.widget.ConstraintLayout>
