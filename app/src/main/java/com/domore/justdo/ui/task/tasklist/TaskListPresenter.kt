@@ -1,4 +1,4 @@
-package com.domore.justdo.ui.tasklist
+package com.domore.justdo.ui.task.tasklist
 
 import moxy.MvpPresenter
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.tasklist.TaskListFragment">
+    tools:context=".ui.task.tasklist.TaskListFragment">
 
     <TextView
         android:id="@+id/no_tasks_tv"

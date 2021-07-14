@@ -1,4 +1,4 @@
-package com.domore.justdo.data.storage.dao
+package com.domore.justdo.storage.dao
 
 import androidx.room.*
 import com.domore.justdo.data.vo.Category

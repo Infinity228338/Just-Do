@@ -1,4 +1,4 @@
-package com.domore.justdo.ui.addTask
+package com.domore.justdo.ui.task.addTask
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,8 +1,7 @@
 package com.domore.justdo.data.category.datasource.local
 
-import com.domore.justdo.data.storage.JustDoDatabase
+import com.domore.justdo.storage.JustDoDatabase
 import com.domore.justdo.data.vo.Category
-import com.domore.justdo.di.Persisted
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 

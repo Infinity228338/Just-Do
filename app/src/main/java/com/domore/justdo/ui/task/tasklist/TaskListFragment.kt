@@ -1,15 +1,16 @@
-package com.domore.justdo.ui.currenttask
+package com.domore.justdo.ui.task.tasklist
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.domore.justdo.R
+import com.domore.justdo.databinding.FragmentTaskListBinding
 import com.domore.justdo.ui.base.BaseFragment
 
+class TaskListFragment : BaseFragment(R.layout.fragment_task_list) {
 
-class CurrentTaskFragment : BaseFragment(R.layout.fragment_current_task) {
-
+    private var viewBinding: FragmentTaskListBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -17,14 +18,14 @@ class CurrentTaskFragment : BaseFragment(R.layout.fragment_current_task) {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_current_task, container, false)
+    ): View {
+        activity?.title = getString(R.string.current_tasks)
+        viewBinding = FragmentTaskListBinding.inflate(inflater, container, false)
+        return viewBinding!!.root
     }
 
     companion object {
-        @JvmStatic
         fun newInstance() =
-            CurrentTaskFragment()
+            TaskListFragment()
     }
 }
