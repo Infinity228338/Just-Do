@@ -26,7 +26,7 @@ class CategoriesPresenter @AssistedInject constructor(
 
         override fun bindView(view: CategoriesItemView) {
             if (view is CategoriesAddItemView)
-                view.bind(Category(0, "add", null, 0))
+                view.bind(Category(0, "add", 0, 0))
             else
                 view.bind(categories[view.pos])
         }
