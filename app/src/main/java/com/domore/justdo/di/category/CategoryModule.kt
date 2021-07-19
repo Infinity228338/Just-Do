@@ -4,13 +4,21 @@ import com.domore.justdo.data.category.datasource.local.LocalCategoryDataSource
 import com.domore.justdo.data.category.datasource.local.LocalCategoryDataSourceImpl
 import com.domore.justdo.data.category.repository.CategoryRepository
 import com.domore.justdo.data.category.repository.CategoryRepositoryImpl
-import com.domore.justdo.di.color.CategoryColorModule
+import com.domore.justdo.di.categorydesc.CategoryColorModule
+import com.domore.justdo.di.categorydesc.CategoryIconModule
 import com.domore.justdo.di.storage.StorageModule
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
 
-@Module(includes = [CategoryUiModule::class, CategoryColorModule::class, StorageModule::class])
+@Module(
+    includes = [
+        CategoryUiModule::class,
+        CategoryColorModule::class,
+        CategoryIconModule::class,
+        StorageModule::class
+    ]
+)
 interface CategoryModule {
     @Singleton
     @Binds

@@ -20,120 +20,60 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_category_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_category_header" />
 
     <TextView
         android:id="@+id/choose_icon_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:text="@string/add_category_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/category_name" />
 
-    <TableLayout
-        android:id="@+id/icons_table"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_icon_picker"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/choose_icon_text">
-
-        <TableRow android:layout_marginBottom="10dp">
-
-            <ImageView
-                android:id="@+id/icon_glass"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_glasses" />
-
-            <ImageView
-                android:id="@+id/icon_movie"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_movie" />
-
-            <ImageView
-                android:id="@+id/icon_bday"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_birthday" />
-
-            <ImageView
-                android:id="@+id/icon_bus"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_bus" />
-
-            <ImageView
-                android:id="@+id/icon_house"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_house" />
-
-            <ImageView
-                android:id="@+id/icon_airplane"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_airplane" />
-
-            <ImageView
-                android:id="@+id/icon_planet"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_planet" />
-
-        </TableRow>
-
-        <TableRow>
-
-            <ImageView
-                android:id="@+id/icon_paint"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_paint" />
-
-            <ImageView
-                android:id="@+id/icon_dive"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_diving" />
-
-            <ImageView
-                android:id="@+id/icon_ticket"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_ticket" />
-
-            <ImageView
-                android:id="@+id/icon_note"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_notebook" />
-
-            <ImageView
-                android:id="@+id/icon_tasks"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_tasks" />
-
-            <ImageView
-                android:id="@+id/icon_geometry"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_geometry" />
-
-            <ImageView
-                android:id="@+id/icon_medal"
-                style="@style/CategoryIconTable"
-                android:src="@drawable/ic_medal" />
-
-        </TableRow>
-    </TableLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/choose_icon_text"
+        tools:listitem="@layout/icon_item_layout" />
 
 
     <TextView
         android:id="@+id/choose_color_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:text="@string/add_category_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/icons_table" />
+        app:layout_constraintTop_toBottomOf="@+id/rv_icon_picker" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_color_picker"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginStart="30dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/choose_color_text"
-        app:spanCount="7"
         tools:listitem="@layout/color_item_layout" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="@string/ok"
+        android:textColor="@color/main_green"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rv_color_picker">
+
+    </Button>
 </androidx.constraintlayout.widget.ConstraintLayout>

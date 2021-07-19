@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import com.domore.justdo.R
 import com.domore.justdo.databinding.FragmentCategoriesBinding
 import com.domore.justdo.ui.base.BaseFragment
+import com.domore.justdo.ui.categories.add.AddCategoryFragment
 import com.domore.justdo.ui.categories.list.CategoriesAdapter
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
@@ -60,7 +62,10 @@ class CategoriesFragment : BaseFragment(R.layout.fragment_categories), Categorie
     }
 
     override fun showDialog() {
-        TODO("Not yet implemented")
+        val fm: FragmentManager = parentFragmentManager
+        val addCategoryDialogFragment: AddCategoryFragment =
+            AddCategoryFragment.newInstance()
+        addCategoryDialogFragment.show(fm, "fragment_add")
     }
 
     override fun onDestroyView() {

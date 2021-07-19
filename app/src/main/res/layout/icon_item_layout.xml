@@ -5,10 +5,9 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/color_item"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/circle_back" />
+        android:id="@+id/icon_item"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="10dp" />
 
 </FrameLayout>

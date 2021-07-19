@@ -1,23 +1,108 @@
 package com.domore.justdo.ui.categories.add
 
+import android.content.Context
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.annotation.Nullable
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.GridLayoutManager
+import com.domore.justdo.data.categorycolor.repository.CategoryColorRepository
+import com.domore.justdo.data.categoryicon.repository.CategoryIconRepository
+import com.domore.justdo.data.vo.CategoryColor
+import com.domore.justdo.data.vo.CategoryIcon
+import com.domore.justdo.databinding.FragmentAddCategoryBinding
+import com.domore.justdo.ui.categories.add.colors.ColorAdapter
+import com.domore.justdo.ui.categories.add.icons.IconsAdapter
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
+import dagger.android.support.AndroidSupportInjection
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import javax.inject.Inject
 
-class AddCategoryFragment : DialogFragment() {
-//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
-//        AlertDialog.Builder(requireContext())
-//            .setMessage(getString(R.string.order_confirmation))
-//            .setPositiveButton(getString(R.string.ok)) { _, _ -> }
-//            .create()
-//
-//    companion object {
-//        const val TAG = "PurchaseConfirmationDialog"
-//    }
 
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_add_category, container, false)
-//    }
+class AddCategoryFragment : DialogFragment(), HasAndroidInjector {
+
+    @Inject
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+
+    @Inject
+    lateinit var colorRepository: CategoryColorRepository
+
+    @Inject
+    lateinit var iconRepository: CategoryIconRepository
+
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
+
+    override fun androidInjector(): AndroidInjector<Any> {
+        return androidInjector
+    }
+
+    private var colorAdapter: ColorAdapter? = null
+    private var iconAdapter: IconsAdapter? = null
+    private var viewBinding: FragmentAddCategoryBinding? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        colorAdapter = ColorAdapter()
+        iconAdapter = IconsAdapter()
+        viewBinding = FragmentAddCategoryBinding.inflate(inflater, container, false)
+        viewBinding?.apply {
+            rvColorPicker.also {
+                it.layoutManager = GridLayoutManager(context, 7)
+                it.adapter = colorAdapter
+                colorRepository
+                    .getColors()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(::addColors)
+            }
+            rvIconPicker.also {
+                it.layoutManager = GridLayoutManager(context, 7)
+                it.adapter = iconAdapter
+                iconRepository
+                    .getIcons()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(::addIcons)
+            }
+        }
+        return viewBinding!!.root
+    }
+
+    override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        dialog!!.window!!.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
+        )
+
+    }
+
+
+    private fun addColors(colors: List<CategoryColor>) {
+        colorAdapter?.apply {
+            addColors(colors)
+            notifyDataSetChanged()
+        }
+    }
+
+    private fun addIcons(icons: List<CategoryIcon>) {
+        iconAdapter?.apply {
+            addIcons(icons)
+            notifyDataSetChanged()
+        }
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun newInstance() =
+            AddCategoryFragment()
+    }
 }

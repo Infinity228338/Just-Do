@@ -9,6 +9,10 @@ import androidx.room.PrimaryKey
         entity = CategoryColor::class,
         parentColumns = ["id"],
         childColumns = ["backgroundColorId"]
+    ), ForeignKey(
+        entity = CategoryIcon::class,
+        parentColumns = ["id"],
+        childColumns = ["iconId"]
     )]
 )
 data class Category(

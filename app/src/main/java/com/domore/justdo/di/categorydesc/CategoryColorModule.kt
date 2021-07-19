@@ -1,4 +1,4 @@
-package com.domore.justdo.di.color
+package com.domore.justdo.di.categorydesc
 
 import com.domore.justdo.data.categorycolor.datasource.local.LocalCategoryColorDataSource
 import com.domore.justdo.data.categorycolor.datasource.local.LocalCategoryColorDataSourceImpl
@@ -8,7 +8,7 @@ import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [CategoryColorUiModule::class])
 interface CategoryColorModule {
     @Singleton
     @Binds
