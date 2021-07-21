@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
+import com.domore.justdo.R
 import com.domore.justdo.data.vo.Category
 import com.domore.justdo.databinding.ItemCategoryBinding
 
@@ -37,12 +38,15 @@ class CategoriesAdapter(val presenter: CategoriesListPresenter) :
     inner class CategoryViewHolder(val binding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root), CategoriesItemView {
         override fun bind(category: Category) {
-            binding.categoryName.text = itemView.context.getString(category.nameRes)
+            binding.categoryName.text =
+                category.name ?: itemView.context.getString(category.nameRes)
+            val iconRes =
+                if (category.iconResId == 0) R.drawable.ic_icon_list else category.iconResId
             binding.categotyIcon.also {
                 it.setImageDrawable(
                     AppCompatResources.getDrawable(
                         itemView.context,
-                        category.iconResId
+                        iconRes
                     )
                 )
                 it.setOnClickListener {

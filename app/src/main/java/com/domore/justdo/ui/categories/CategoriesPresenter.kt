@@ -1,5 +1,6 @@
 package com.domore.justdo.ui.categories
 
+import com.domore.justdo.R
 import com.domore.justdo.data.category.repository.CategoryRepository
 import com.domore.justdo.data.vo.Category
 import com.domore.justdo.schedulers.Schedulers
@@ -68,11 +69,39 @@ class CategoriesPresenter @AssistedInject constructor(
     private fun onFetchSuccess(list: List<Category>) {
         categoryListPresenter.categories.clear()
         categoryListPresenter.categories.addAll(list)
+        categoryListPresenter.categories.add(getAddCategoryItem())
         viewState.updateList()
     }
 
     fun backPressed(): Boolean {
         router.exit()
         return true
+    }
+
+    fun addCategory(name: String, colorRes: Int, drawRes: Int) {
+
+        categoryRepository.addCategory(name, colorRes, drawRes)
+            .subscribeOn(schedulers.background())
+            .observeOn(schedulers.main())
+            .subscribe(::onCategoryCreated)
+    }
+
+    private fun onCategoryCreated(categrory: Category) {
+        categoryListPresenter.categories.let {
+            it[it.lastIndex] = categrory
+            viewState.updateItem(it.lastIndex)
+            it.add(getAddCategoryItem())
+            viewState.addItemToList(it.lastIndex)
+        }
+    }
+
+    companion object AddCategoryItem {
+        fun getAddCategoryItem() = Category(
+            0,
+            R.string.add,
+            null,
+            0,
+            R.drawable.predef_icon_add
+        )
     }
 }

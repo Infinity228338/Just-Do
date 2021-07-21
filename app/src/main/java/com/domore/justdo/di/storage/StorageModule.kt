@@ -10,18 +10,12 @@ import javax.inject.Singleton
 @Module
 class StorageModule {
 
-//    @InMemory
-//    @Singleton
-//    @Provides
-//    fun provideInMemoryGitHubStorage(context: Context): JustDoDatabase =
-//        Room.inMemoryDatabaseBuilder(context, JustDoDatabase::class.java)
-//            .fallbackToDestructiveMigration()
-//            .build()
 
     @Singleton
     @Provides
     fun provideDatabaseGitHubStorage(context: Context): JustDoDatabase =
         Room.databaseBuilder(context, JustDoDatabase::class.java, "justdo.db")
+            .fallbackToDestructiveMigration()
             .build()
 
 }

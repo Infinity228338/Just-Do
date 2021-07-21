@@ -1,6 +1,9 @@
 package com.domore.justdo.storage.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.domore.justdo.data.vo.Category
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
@@ -16,6 +19,6 @@ interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun retain(categories: List<Category>): Completable
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun retain(category: Category): Completable
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun retain(category: Category): Single<Long>
 }

@@ -9,7 +9,6 @@ import android.view.WindowManager
 import androidx.annotation.Nullable
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.domore.justdo.data.category.repository.CategoryRepository
 import com.domore.justdo.data.categorycolor.repository.CategoryColorRepository
 import com.domore.justdo.data.categoryicon.repository.CategoryIconRepository
 import com.domore.justdo.data.vo.CategoryColor
@@ -34,10 +33,25 @@ class AddCategoryFragment : DialogFragment(), HasAndroidInjector {
     lateinit var colorRepository: CategoryColorRepository
 
     @Inject
-    lateinit var categoryRepository: CategoryRepository
-
-    @Inject
     lateinit var iconRepository: CategoryIconRepository
+
+    private var callback: OnCategoryAddedListener? = null
+    private var colorAdapter: ColorAdapter? = null
+    private var iconAdapter: IconsAdapter? = null
+    private var viewBinding: FragmentAddCategoryBinding? = null
+
+    interface OnCategoryAddedListener {
+        fun onCategorySubmit(name: String, colorRes: Int, drawRes: Int)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        callback = try {
+            targetFragment as OnCategoryAddedListener?
+        } catch (e: Exception) {
+            throw ClassCastException("Calling Fragment must implement OnAddFriendListener")
+        }
+    }
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
@@ -47,10 +61,6 @@ class AddCategoryFragment : DialogFragment(), HasAndroidInjector {
     override fun androidInjector(): AndroidInjector<Any> {
         return androidInjector
     }
-
-    private var colorAdapter: ColorAdapter? = null
-    private var iconAdapter: IconsAdapter? = null
-    private var viewBinding: FragmentAddCategoryBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,13 +97,18 @@ class AddCategoryFragment : DialogFragment(), HasAndroidInjector {
         )
 
         viewBinding!!.buttonAdd.setOnClickListener {
-            if (viewBinding!!.categoryName.text.toString().isNotEmpty()) {
-//                categoryRepository.addCategory(viewBinding!!.categoryName.text.toString())
+            viewBinding?.let {
+                if (it.categoryName.text.toString().isNotEmpty()) {
+                    callback?.onCategorySubmit(
+                        it.categoryName.text.toString(),
+                        colorAdapter?.getSelected()?.colorRes ?: 0,
+                        iconAdapter?.getSelected()?.drawRes ?: 0
+                    )
+                    this.dismiss()
+                }
             }
         }
-
     }
-
 
     private fun addColors(colors: List<CategoryColor>) {
         colorAdapter?.apply {
@@ -110,7 +125,6 @@ class AddCategoryFragment : DialogFragment(), HasAndroidInjector {
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance() =
             AddCategoryFragment()

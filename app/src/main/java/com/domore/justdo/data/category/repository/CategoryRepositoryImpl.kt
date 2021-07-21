@@ -16,4 +16,8 @@ class CategoryRepositoryImpl
 
     override fun getCategoryById(id: Long): Single<Category> =
         localCategoryDataSource.getCategoryById(id)
+
+    override fun addCategory(name: String, colorRes: Int, drawRes: Int): Single<Category> =
+        localCategoryDataSource.addCategory(name, colorRes, drawRes)
+
 }

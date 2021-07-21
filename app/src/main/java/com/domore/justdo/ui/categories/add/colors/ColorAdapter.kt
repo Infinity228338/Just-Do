@@ -1,6 +1,5 @@
 package com.domore.justdo.ui.categories.add.colors
 
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
@@ -8,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.domore.justdo.R
 import com.domore.justdo.data.vo.CategoryColor
 import com.domore.justdo.databinding.ColorItemLayoutBinding
+import com.domore.justdo.ui.base.getResColor
 
 class ColorAdapter(
 
@@ -66,15 +66,12 @@ class ColorAdapter(
                     itemView.context,
                     R.drawable.circle_back
                 )?.apply {
-                    setTint(getResColor(categoryColor.colorRes))
+                    setTint(getResColor(itemView.context, categoryColor.colorRes))
                 }
-
                 if (selectedItemPos == layoutPosition)
                     colorItem.setImageResource(R.drawable.ic_baseline_check_24)
                 else
                     colorItem.setImageDrawable(drawable)
-
-
             }
             itemView.setOnClickListener {
                 notifyItemChanged(selectedItemPos)
@@ -82,12 +79,6 @@ class ColorAdapter(
                 notifyItemChanged(selectedItemPos)
             }
         }
-
-        private fun getResColor(colorRes: Int) =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                itemView.context.getColor(colorRes);
-            } else
-                itemView.context.resources.getColor(colorRes)
 
         override var pos: Int = -1
 

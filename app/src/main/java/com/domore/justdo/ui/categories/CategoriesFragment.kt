@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import com.domore.justdo.R
 import com.domore.justdo.databinding.FragmentCategoriesBinding
@@ -15,7 +14,10 @@ import com.somethingsimple.poplibs.ui.common.BackButtonListener
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
-class CategoriesFragment : BaseFragment(R.layout.fragment_categories), CategoriesView, BackButtonListener {
+class CategoriesFragment : BaseFragment(R.layout.fragment_categories),
+    CategoriesView,
+    BackButtonListener,
+    AddCategoryFragment.OnCategoryAddedListener {
 
 
     @Inject
@@ -62,12 +64,20 @@ class CategoriesFragment : BaseFragment(R.layout.fragment_categories), Categorie
         adapter?.notifyItemInserted(position)
     }
 
+    override fun updateItem(position: Int) {
+        adapter?.notifyItemChanged(position)
+    }
+
     override fun showDialog() {
-        val fm: FragmentManager = childFragmentManager
         val addCategoryDialogFragment: AddCategoryFragment =
             AddCategoryFragment.newInstance()
         addCategoryDialogFragment.isCancelable = true
-        addCategoryDialogFragment.show(fm, "fragment_add")
+        addCategoryDialogFragment.setTargetFragment(this, 0)
+        addCategoryDialogFragment.show(parentFragmentManager, "fragment_add")
+    }
+
+    override fun onCategorySubmit(name: String, colorRes: Int, drawRes: Int) {
+        presenter.addCategory(name, colorRes, drawRes)
     }
 
     override fun onDestroyView() {
@@ -75,5 +85,6 @@ class CategoriesFragment : BaseFragment(R.layout.fragment_categories), Categorie
         viewBinding = null
     }
 
-    override fun backPressed(): Boolean  = presenter.backPressed()
+    override fun backPressed(): Boolean = presenter.backPressed()
+
 }

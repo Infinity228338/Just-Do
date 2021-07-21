@@ -1,6 +1,5 @@
 package com.domore.justdo.ui.categories.add.icons
 
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
@@ -8,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.domore.justdo.R
 import com.domore.justdo.data.vo.CategoryIcon
 import com.domore.justdo.databinding.ItemIconBinding
+import com.domore.justdo.ui.base.getResColor
 
 class IconsAdapter : RecyclerView.Adapter<IconsAdapter.ViewHolder>() {
 
@@ -59,29 +59,23 @@ class IconsAdapter : RecyclerView.Adapter<IconsAdapter.ViewHolder>() {
                     )?.apply {
                         setTint(
                             if (selectedItemPos == layoutPosition) {
-                                getResColor(R.color.main_green)
+                                getResColor(itemView.context, R.color.main_green)
                             } else {
-                                getResColor(R.color.black)
+                                getResColor(itemView.context, R.color.black)
                             }
                         )
                     })
-                    setOnClickListener {
-                        notifyItemChanged(selectedItemPos)
-                        selectedItemPos = layoutPosition
-                        notifyItemChanged(selectedItemPos)
-
-                    }
+                    setOnClickListener { changeSelectedPosition() }
                 }
 
             }
         }
 
-
-        private fun getResColor(colorRes: Int) =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                itemView.context.getColor(colorRes);
-            } else
-                itemView.context.resources.getColor(colorRes)
+        private fun changeSelectedPosition() {
+            notifyItemChanged(selectedItemPos)
+            selectedItemPos = layoutPosition
+            notifyItemChanged(selectedItemPos)
+        }
 
         override var pos: Int = -1
     }

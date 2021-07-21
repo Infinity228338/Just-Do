@@ -69,17 +69,18 @@
         tools:itemCount="2"
         tools:listitem="@layout/color_item_layout" />
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_add"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="10dp"
         android:text="@string/ok"
         android:textColor="@color/main_green"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rv_color_picker">
 
-    </TextView>
+    </com.google.android.material.button.MaterialButton>
 </androidx.constraintlayout.widget.ConstraintLayout>
