@@ -35,5 +35,5 @@
         android:layout_margin="10dp"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/category_item" />
+        tools:listitem="@layout/item_category" />
 </androidx.constraintlayout.widget.ConstraintLayout>

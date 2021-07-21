@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/add_category_background"
     tools:context=".ui.categories.add.AddCategoryFragment">
 
     <TextView
@@ -36,14 +37,14 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_icon_picker"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/choose_icon_text"
-        tools:listitem="@layout/icon_item_layout" />
+        tools:listitem="@layout/item_icon" />
 
 
     <TextView
@@ -58,7 +59,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_color_picker"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginEnd="5dp"
         app:layout_constraintEnd_toEndOf="parent"

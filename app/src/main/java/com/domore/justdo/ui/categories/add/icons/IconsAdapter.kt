@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.domore.justdo.data.vo.CategoryIcon
-import com.domore.justdo.databinding.IconItemLayoutBinding
+import com.domore.justdo.databinding.ItemIconBinding
 
 class IconsAdapter : RecyclerView.Adapter<IconsAdapter.ViewHolder>() {
 
@@ -13,7 +13,7 @@ class IconsAdapter : RecyclerView.Adapter<IconsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            IconItemLayoutBinding.inflate(
+            ItemIconBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -45,14 +45,14 @@ class IconsAdapter : RecyclerView.Adapter<IconsAdapter.ViewHolder>() {
 
     }
 
-    class ViewHolder(val binding: IconItemLayoutBinding) : RecyclerView.ViewHolder(binding.root),
+    class ViewHolder(val binding: ItemIconBinding) : RecyclerView.ViewHolder(binding.root),
         IconsItemView {
-        override fun bind(icon: CategoryIcon) {
+        override fun bind(categoryIcon: CategoryIcon) {
             with(binding) {
 
                 val drawable = AppCompatResources.getDrawable(
                     itemView.context,
-                    icon.drawRes
+                    categoryIcon.drawRes
                 )
                 iconItem.setImageDrawable(drawable)
             }

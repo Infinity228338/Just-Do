@@ -10,6 +10,7 @@
 
     <color name="ultra_light_grey">#ECECEC</color>
     <color name="main_green">#118059</color>
+    <color name="main_green_light">#77B6A1</color>
 
     //categories
     <color name="cat1">#A4C400</color>

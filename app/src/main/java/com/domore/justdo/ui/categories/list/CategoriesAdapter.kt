@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.domore.justdo.data.vo.Category
-import com.domore.justdo.databinding.CategoryItemBinding
+import com.domore.justdo.databinding.ItemCategoryBinding
 
 class CategoriesAdapter(val presenter: CategoriesListPresenter) :
     RecyclerView.Adapter<CategoriesAdapter.CategoryViewHolder>() {
@@ -15,7 +15,7 @@ class CategoriesAdapter(val presenter: CategoriesListPresenter) :
         viewType: Int
     ): CategoriesAdapter.CategoryViewHolder {
         val binding =
-            CategoryItemBinding.inflate(
+            ItemCategoryBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -34,7 +34,7 @@ class CategoriesAdapter(val presenter: CategoriesListPresenter) :
     override fun getItemCount(): Int = presenter.getCount()
 
 
-    inner class CategoryViewHolder(val binding: CategoryItemBinding) :
+    inner class CategoryViewHolder(val binding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root), CategoriesItemView {
         override fun bind(category: Category) {
             binding.categoryName.text = itemView.context.getString(category.nameRes)

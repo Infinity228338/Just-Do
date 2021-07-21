@@ -70,4 +70,9 @@ class CategoriesPresenter @AssistedInject constructor(
         categoryListPresenter.categories.addAll(list)
         viewState.updateList()
     }
+
+    fun backPressed(): Boolean {
+        router.exit()
+        return true
+    }
 }

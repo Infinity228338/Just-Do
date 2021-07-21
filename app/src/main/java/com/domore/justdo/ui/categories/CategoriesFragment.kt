@@ -11,10 +11,11 @@ import com.domore.justdo.databinding.FragmentCategoriesBinding
 import com.domore.justdo.ui.base.BaseFragment
 import com.domore.justdo.ui.categories.add.AddCategoryFragment
 import com.domore.justdo.ui.categories.list.CategoriesAdapter
+import com.somethingsimple.poplibs.ui.common.BackButtonListener
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
-class CategoriesFragment : BaseFragment(R.layout.fragment_categories), CategoriesView {
+class CategoriesFragment : BaseFragment(R.layout.fragment_categories), CategoriesView, BackButtonListener {
 
 
     @Inject
@@ -62,9 +63,10 @@ class CategoriesFragment : BaseFragment(R.layout.fragment_categories), Categorie
     }
 
     override fun showDialog() {
-        val fm: FragmentManager = parentFragmentManager
+        val fm: FragmentManager = childFragmentManager
         val addCategoryDialogFragment: AddCategoryFragment =
             AddCategoryFragment.newInstance()
+        addCategoryDialogFragment.isCancelable = true
         addCategoryDialogFragment.show(fm, "fragment_add")
     }
 
@@ -72,4 +74,6 @@ class CategoriesFragment : BaseFragment(R.layout.fragment_categories), Categorie
         super.onDestroyView()
         viewBinding = null
     }
+
+    override fun backPressed(): Boolean  = presenter.backPressed()
 }
