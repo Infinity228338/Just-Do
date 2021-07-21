@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/category_item_size"
-    android:layout_height="@dimen/category_item_size">
+    android:layout_height="@dimen/category_item_size"
+    android:layout_marginTop="3dp">
 
     <ImageView
         android:id="@+id/categoty_icon"

@@ -5,7 +5,6 @@ import com.domore.justdo.data.vo.Category
 import com.domore.justdo.schedulers.Schedulers
 import com.domore.justdo.ui.JustDoScreens
 import com.domore.justdo.ui.JustDoScreensImpl
-import com.domore.justdo.ui.categories.list.CategoriesAddItemView
 import com.domore.justdo.ui.categories.list.CategoriesItemView
 import com.domore.justdo.ui.categories.list.CategoriesListPresenter
 import com.github.terrakok.cicerone.Router
@@ -25,10 +24,7 @@ class CategoriesPresenter @AssistedInject constructor(
         override fun getCount() = categories.size
 
         override fun bindView(view: CategoriesItemView) {
-            if (view is CategoriesAddItemView)
-                view.bind(Category(0, "add", 0, 0))
-            else
-                view.bind(categories[view.pos])
+            view.bind(categories[view.pos])
         }
 
     }
@@ -37,6 +33,7 @@ class CategoriesPresenter @AssistedInject constructor(
     val categoryListPresenter = CategoriesListPresenterImpl()
     private var disposables = CompositeDisposable()
 
+
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
@@ -44,7 +41,7 @@ class CategoriesPresenter @AssistedInject constructor(
 
         categoryListPresenter.itemClickListener = { itemView ->
             if (categoryListPresenter.categories.size == 0 ||
-                itemView.pos == categoryListPresenter.categories.size
+                itemView.pos == categoryListPresenter.categories.size - 1
             ) {
                 showDialog()
             } else {
@@ -64,10 +61,7 @@ class CategoriesPresenter @AssistedInject constructor(
                 .getCategories()
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
-                .subscribe(
-                    ::onFetchSuccess,
-                    ::onFetchError
-                )
+                .subscribe(::onFetchSuccess)
         )
     }
 
@@ -76,10 +70,4 @@ class CategoriesPresenter @AssistedInject constructor(
         categoryListPresenter.categories.addAll(list)
         viewState.updateList()
     }
-
-    private fun onFetchError(throwable: Throwable?) {
-
-    }
-
-
 }

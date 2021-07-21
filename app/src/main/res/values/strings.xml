@@ -15,4 +15,20 @@
     <string name="add_category_icon">Выберите иконку</string>
     <string name="add_category_color">Выберите цвет</string>
     <string name="ok">Ok</string>
+
+    <string name="sport">Спорт</string>
+    <string name="house">Дом</string>
+    <string name="celebration">Праздник</string>
+    <string name="health">Здоровье</string>
+    <string name="meeting">Встреча</string>
+    <string name="coffee">Перерыв</string>
+    <string name="study">Учеба</string>
+    <string name="food">Еда</string>
+    <string name="sleeping">Сон</string>
+    <string name="shopping">Покупки</string>
+    <string name="chill">Отдых</string>
+    <string name="reading">Чтение</string>
+    <string name="finance">Финансы</string>
+    <string name="walking">Прогулка</string>
+    <string name="drive">Поездка</string>
 </resources>

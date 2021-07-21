@@ -6,6 +6,3 @@ import com.domore.justdo.ui.base.ItemView
 interface CategoriesItemView : ItemView {
     fun bind(category: Category)
 }
-
-interface CategoriesAddItemView : CategoriesItemView {
-}

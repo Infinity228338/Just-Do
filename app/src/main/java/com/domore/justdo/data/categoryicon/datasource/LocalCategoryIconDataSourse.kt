@@ -5,6 +5,7 @@ import io.reactivex.rxjava3.core.Single
 
 
 interface LocalCategoryIconDataSourse {
-    fun getIcons(): Single<List<CategoryIcon>>
     fun getIconById(id: Long): Single<CategoryIcon>
+    fun getIcons(): Single<List<CategoryIcon>>
+    fun getPredefinedIcons(): Single<List<CategoryIcon>>
 }
