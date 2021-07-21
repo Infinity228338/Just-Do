@@ -9,6 +9,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="10dp"
-        android:background="@drawable/circle_back" />
+        android:background="@drawable/circle_back"
+        android:src="@drawable/ic_baseline_check_24" />
 
 </FrameLayout>

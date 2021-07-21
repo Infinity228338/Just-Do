@@ -15,6 +15,7 @@ class ColorAdapter(
     RecyclerView.Adapter<ColorAdapter.ViewHolder>() {
 
     private val colorsListPresenterImpl: ColorsListPresenterImpl = ColorsListPresenterImpl()
+    var selectedItemPos = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
@@ -50,25 +51,43 @@ class ColorAdapter(
 
     }
 
-    class ViewHolder(val binding: ColorItemLayoutBinding) : RecyclerView.ViewHolder(binding.root),
+    fun getSelected(): CategoryColor? {
+        return if (selectedItemPos != -1) {
+            colorsListPresenterImpl.colors[selectedItemPos]
+        } else null
+    }
+
+    inner class ViewHolder(val binding: ColorItemLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root),
         ColorItemView {
         override fun bind(categoryColor: CategoryColor) {
             with(binding) {
-
                 val drawable = AppCompatResources.getDrawable(
                     itemView.context,
                     R.drawable.circle_back
                 )?.apply {
-                    setTint(
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            itemView.context.getColor(categoryColor.colorRes);
-                        } else
-                            itemView.context.resources.getColor(categoryColor.colorRes)
-                    )
+                    setTint(getResColor(categoryColor.colorRes))
                 }
-                colorItem.setImageDrawable(drawable)
+
+                if (selectedItemPos == layoutPosition)
+                    colorItem.setImageResource(R.drawable.ic_baseline_check_24)
+                else
+                    colorItem.setImageDrawable(drawable)
+
+
+            }
+            itemView.setOnClickListener {
+                notifyItemChanged(selectedItemPos)
+                selectedItemPos = layoutPosition
+                notifyItemChanged(selectedItemPos)
             }
         }
+
+        private fun getResColor(colorRes: Int) =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                itemView.context.getColor(colorRes);
+            } else
+                itemView.context.resources.getColor(colorRes)
 
         override var pos: Int = -1
 

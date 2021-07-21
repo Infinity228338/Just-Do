@@ -9,6 +9,7 @@ import android.view.WindowManager
 import androidx.annotation.Nullable
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.domore.justdo.data.category.repository.CategoryRepository
 import com.domore.justdo.data.categorycolor.repository.CategoryColorRepository
 import com.domore.justdo.data.categoryicon.repository.CategoryIconRepository
 import com.domore.justdo.data.vo.CategoryColor
@@ -33,6 +34,9 @@ class AddCategoryFragment : DialogFragment(), HasAndroidInjector {
     lateinit var colorRepository: CategoryColorRepository
 
     @Inject
+    lateinit var categoryRepository: CategoryRepository
+
+    @Inject
     lateinit var iconRepository: CategoryIconRepository
 
     override fun onAttach(context: Context) {
@@ -51,7 +55,7 @@ class AddCategoryFragment : DialogFragment(), HasAndroidInjector {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         colorAdapter = ColorAdapter()
         iconAdapter = IconsAdapter()
         viewBinding = FragmentAddCategoryBinding.inflate(inflater, container, false)
@@ -81,6 +85,12 @@ class AddCategoryFragment : DialogFragment(), HasAndroidInjector {
         dialog!!.window!!.setSoftInputMode(
             WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
         )
+
+        viewBinding!!.buttonAdd.setOnClickListener {
+            if (viewBinding!!.categoryName.text.toString().isNotEmpty()) {
+//                categoryRepository.addCategory(viewBinding!!.categoryName.text.toString())
+            }
+        }
 
     }
 

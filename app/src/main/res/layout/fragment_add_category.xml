@@ -44,6 +44,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/choose_icon_text"
+        tools:itemCount="2"
         tools:listitem="@layout/item_icon" />
 
 
@@ -65,16 +66,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/choose_color_text"
+        tools:itemCount="2"
         tools:listitem="@layout/color_item_layout" />
 
-    <Button
+    <TextView
+        android:id="@+id/button_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/ok"
         android:textColor="@color/main_green"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rv_color_picker">
 
-    </Button>
+    </TextView>
 </androidx.constraintlayout.widget.ConstraintLayout>
