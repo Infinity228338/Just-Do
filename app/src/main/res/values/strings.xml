@@ -34,6 +34,7 @@
 
     <string name="new_task">Новая задача</string>
     <string name="mode_and_time">Режим и время</string>
+    <string name="choose_mode">Выберите режим</string>
     <string name="text_interval">интервал</string>
     <string name="text_timer">таймер</string>
     <string name="text_precise_time">точное время</string>

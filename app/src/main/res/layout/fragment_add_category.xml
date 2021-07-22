@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/add_category_background"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_rounded_white"
     tools:context=".ui.categories.add.AddCategoryFragment">
 
     <TextView
@@ -21,64 +21,46 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_category_name"
+        android:textColorHint="@color/main_green"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_category_header" />
 
     <TextView
         android:id="@+id/choose_icon_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        style="@style/GreenText.MarginStart"
         android:text="@string/add_category_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/category_name" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_icon_picker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
+        style="@style/PickerRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/choose_icon_text"
         tools:itemCount="2"
         tools:listitem="@layout/item_icon" />
 
-
     <TextView
         android:id="@+id/choose_color_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        style="@style/GreenText.MarginStart"
         android:text="@string/add_category_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rv_icon_picker" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_color_picker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginEnd="5dp"
+        style="@style/PickerRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/choose_color_text"
         tools:itemCount="2"
-        tools:listitem="@layout/color_item_layout" />
+        tools:listitem="@layout/item_color" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_add"
-        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/ok"
-        android:textColor="@color/main_green"
+        style="@style/GreenMaterialButton.Ok"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rv_color_picker">
 

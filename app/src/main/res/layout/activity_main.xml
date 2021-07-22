@@ -9,11 +9,7 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_gravity="bottom"
-        android:background="@drawable/bottom_view_background"
-        app:labelVisibilityMode="unlabeled"
+        style="@style/justDoBottomNavigationView"
         app:menu="@menu/menu_main" />
 
 </FrameLayout>

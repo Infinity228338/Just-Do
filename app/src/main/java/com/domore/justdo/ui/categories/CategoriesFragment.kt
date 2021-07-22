@@ -10,7 +10,7 @@ import com.domore.justdo.databinding.FragmentCategoriesBinding
 import com.domore.justdo.ui.base.BaseFragment
 import com.domore.justdo.ui.categories.add.AddCategoryFragment
 import com.domore.justdo.ui.categories.list.CategoriesAdapter
-import com.somethingsimple.poplibs.ui.common.BackButtonListener
+import com.domore.justdo.ui.base.BackButtonListener
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 

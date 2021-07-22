@@ -78,6 +78,11 @@ class CategoriesPresenter @AssistedInject constructor(
         return true
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.dispose()
+    }
+
     fun addCategory(name: String, colorRes: Int, drawRes: Int) {
 
         categoryRepository.addCategory(name, colorRes, drawRes)

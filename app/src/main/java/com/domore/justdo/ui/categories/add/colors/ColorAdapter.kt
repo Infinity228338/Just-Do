@@ -6,7 +6,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.domore.justdo.R
 import com.domore.justdo.data.vo.CategoryColor
-import com.domore.justdo.databinding.ColorItemLayoutBinding
+import com.domore.justdo.databinding.ItemColorBinding
 import com.domore.justdo.ui.base.getResColor
 
 class ColorAdapter(
@@ -19,7 +19,7 @@ class ColorAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            ColorItemLayoutBinding.inflate(
+            ItemColorBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -57,7 +57,7 @@ class ColorAdapter(
         } else null
     }
 
-    inner class ViewHolder(val binding: ColorItemLayoutBinding) :
+    inner class ViewHolder(val binding: ItemColorBinding) :
         RecyclerView.ViewHolder(binding.root),
         ColorItemView {
         override fun bind(categoryColor: CategoryColor) {

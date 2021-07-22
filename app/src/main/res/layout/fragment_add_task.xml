@@ -18,37 +18,50 @@
         tools:itemCount="2"
         tools:listitem="@layout/item_task_oneline" />
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/task_name"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_task_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
-        android:hint="@string/new_task"
-        android:textColorHint="@color/main_green"
-        app:endIconDrawable="@drawable/ic_add_24"
-        app:endIconMode="custom"
-        app:endIconTint="@color/main_green"
+        app:cardBackgroundColor="@color/ultra_light_grey"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_new_tasks"
-        app:startIconDrawable="@drawable/ic_icon_list">
+        app:layout_constraintTop_toBottomOf="@+id/rv_new_tasks">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_edit_text"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/task_name"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:hint="@string/new_task"
+            android:textColorHint="@color/main_green"
+            app:endIconDrawable="@drawable/ic_add_24"
+            app:endIconMode="custom"
+            app:endIconTint="@color/main_green"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_new_tasks"
+            app:startIconDrawable="@drawable/ic_icon_list">
 
-    <androidx.cardview.widget.CardView
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_task_mode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:backgroundTint="@color/ultra_light_grey"
-        app:layout_constraintTop_toBottomOf="@+id/task_name">
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/ultra_light_grey"
+        app:layout_constraintTop_toBottomOf="@+id/card_task_name">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -79,8 +92,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
                 android:text="@string/text_interval"
                 android:textColor="@color/main_green"
+                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@+id/text_timer"
                 app:layout_constraintStart_toEndOf="@+id/time_icon"
                 app:layout_constraintStart_toStartOf="parent"
@@ -91,8 +106,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="25dp"
                 android:text="@string/text_timer"
                 android:textColor="@color/main_green_light"
+                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@+id/text_precise_time"
                 app:layout_constraintStart_toEndOf="@+id/text_interval"
                 app:layout_constraintTop_toBottomOf="@+id/text_mode_time" />
@@ -102,8 +119,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
                 android:text="@string/text_precise_time"
                 android:textColor="@color/main_green_light"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/text_timer"
                 app:layout_constraintTop_toBottomOf="@+id/text_mode_time" />
@@ -115,6 +134,8 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/text_start"
                 android:textColor="@color/main_green"
+
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/text_interval"
                 app:layout_constraintTop_toBottomOf="@+id/text_interval" />
 
@@ -124,6 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
+                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@id/text_start"
                 app:layout_constraintTop_toBottomOf="@+id/text_interval"
                 tools:text="@tools:sample/date/hhmmss" />
@@ -135,6 +157,7 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/text_end"
                 android:textColor="@color/main_green"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/text_start"
                 app:layout_constraintTop_toBottomOf="@+id/text_start" />
 
@@ -144,6 +167,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
+                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@id/text_end"
                 app:layout_constraintTop_toBottomOf="@+id/text_start"
                 tools:text="@tools:sample/date/hhmmss" />
@@ -151,16 +175,17 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="2dp"
         android:layout_marginEnd="30dp"
-        android:backgroundTint="@color/ultra_light_grey"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/ultra_light_grey"
         app:layout_constraintTop_toBottomOf="@+id/card_task_mode">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -190,7 +215,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/text_cancel"
@@ -212,5 +237,6 @@
         android:textColor="@color/main_green"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card_date" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
