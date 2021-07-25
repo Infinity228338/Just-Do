@@ -43,4 +43,6 @@
     <string name="text_date">Дата</string>
     <string name="text_ok">Ok</string>
     <string name="text_cancel">Отмена</string>
+    <string name="text_duration">Длительность</string>
+    <string name="text_precise">Время</string>
 </resources>

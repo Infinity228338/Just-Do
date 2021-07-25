@@ -110,7 +110,9 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
     //Expandable layout
-    implementation "com.github.skydoves:expandablelayout:1.0.7"
+//    implementation "com.github.skydoves:expandablelayout:1.0.7"
+    //number picker
+    implementation 'io.github.ShawnLin013:number-picker:2.4.13'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

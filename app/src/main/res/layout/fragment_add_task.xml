@@ -134,7 +134,6 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/text_start"
                 android:textColor="@color/main_green"
-
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/text_interval"
                 app:layout_constraintTop_toBottomOf="@+id/text_interval" />
@@ -170,6 +169,50 @@
                 android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@id/text_end"
                 app:layout_constraintTop_toBottomOf="@+id/text_start"
+                tools:text="@tools:sample/date/hhmmss" />
+
+            <TextView
+                android:id="@+id/text_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/text_duration"
+                android:textColor="@color/main_green"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@id/text_interval"
+                app:layout_constraintTop_toBottomOf="@+id/text_interval" />
+
+            <TextView
+                android:id="@+id/time_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/text_duration"
+                app:layout_constraintTop_toBottomOf="@+id/text_start"
+                tools:text="@tools:sample/date/hhmmss" />
+
+            <TextView
+                android:id="@+id/text_precise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/text_precise"
+                android:textColor="@color/main_green"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@id/text_interval"
+                app:layout_constraintTop_toBottomOf="@+id/text_interval" />
+
+            <TextView
+                android:id="@+id/time_precise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/text_precise"
+                app:layout_constraintTop_toBottomOf="@+id/text_interval"
                 tools:text="@tools:sample/date/hhmmss" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

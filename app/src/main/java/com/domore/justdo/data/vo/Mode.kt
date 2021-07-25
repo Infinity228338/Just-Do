@@ -8,3 +8,16 @@ data class Mode(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val name: String
 )
+
+enum class ModeType {
+    INTERVAL,
+    TIMER,
+    PRECISE_TIME
+}
+
+enum class TimeTypes {
+    INTERVAL_START,
+    INTERVAL_END,
+    TIMER,
+    PRECISE_TIME
+}
