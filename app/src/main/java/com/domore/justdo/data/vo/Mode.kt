@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class Mode(
     @PrimaryKey(autoGenerate = true) val id: Long,
-    val name: String
+    val name: ModeType
 )
 
 enum class ModeType {

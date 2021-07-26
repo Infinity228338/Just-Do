@@ -13,8 +13,9 @@ import com.domore.justdo.storage.dao.*
         CategoryIcon::class,
         Mode::class,
         Task::class],
-    version = 3
+    version = 2
 )
+@androidx.room.TypeConverters(TypeConverters::class)
 abstract class JustDoDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
     abstract fun categoryColorDao(): CategoryColorDao

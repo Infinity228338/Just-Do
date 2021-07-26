@@ -12,4 +12,6 @@ class ModeRepositoryImpl
     override fun getModes(): Single<List<Mode>> = localModeDataSource.getModes()
 
     override fun getModeById(id: Long): Single<Mode> = localModeDataSource.getModeById(id)
+
+    override fun getModeByName(name: String): Single<Mode>  = localModeDataSource.getModeByName(name)
 }

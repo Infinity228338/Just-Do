@@ -1,7 +1,10 @@
 package com.domore.justdo.ui.task.addTask
 
+import com.domore.justdo.data.mode.repository.ModeRepository
 import com.domore.justdo.data.task.repository.TaskRepository
+import com.domore.justdo.data.vo.Mode
 import com.domore.justdo.data.vo.ModeType
+import com.domore.justdo.data.vo.Task
 import com.domore.justdo.data.vo.TimeTypes
 import com.domore.justdo.schedulers.Schedulers
 import com.github.terrakok.cicerone.Router
@@ -13,12 +16,15 @@ import java.util.*
 
 class AddTaskPresenter @AssistedInject constructor(
     private val taskRepository: TaskRepository,
+    private val modeRepository: ModeRepository,
     private val schedulers: Schedulers,
     private val router: Router
 ) : MvpPresenter<AddTaskView>() {
 
     private var disposables = CompositeDisposable()
     private var cardTaskModeExpanded = false
+    private var cardTaskNameExpanded = false
+    private lateinit var currentTask: Task
 
 
     override fun onFirstViewAttach() {
@@ -26,7 +32,13 @@ class AddTaskPresenter @AssistedInject constructor(
         viewState.init()
     }
 
+    fun cardTaskNameClicked() {
+        cardTaskNameExpanded = !cardTaskNameExpanded
+        viewState.processNameCardClick(cardTaskNameExpanded)
+    }
+
     fun cardTaskModeClicked() {
+        if (cardTaskNameExpanded) cardTaskNameClicked()
         cardTaskModeExpanded = !cardTaskModeExpanded
         viewState.showOrHideModes(cardTaskModeExpanded)
         viewState.hideAllTimes()
@@ -35,19 +47,33 @@ class AddTaskPresenter @AssistedInject constructor(
     }
 
     fun modeClicked(mode: ModeType) {
+        modeRepository
+            .getModeByName(mode.name)
+            .observeOn(schedulers.main())
+            .subscribeOn(schedulers.background())
+            .subscribe(::onModeLoaded)
+
         viewState.hideAllTimes()
         viewState.processModeClick(
-            mode, Calendar.getInstance().getFormatted()
+            mode,
+            if (mode == ModeType.TIMER) "00:00:00"
+            else Calendar.getInstance().getTimeFormatted()
         )
     }
 
+    private fun onModeLoaded(mode: Mode) {
+        currentTask.modeId = mode.id
+    }
+
     fun dateClicked() {
+        if (cardTaskNameExpanded) cardTaskNameClicked()
         if (cardTaskModeExpanded) cardTaskModeClicked()
         viewState.showDatePicker(Calendar.getInstance())
     }
 
     fun setDate(dateAndTime: Calendar) {
-        dateAndTime.time
+        currentTask.date = dateAndTime.time
+        viewState.setDate(dateAndTime.getDateFormatted())
     }
 
     fun timeStartClicked() {
@@ -65,12 +91,19 @@ class AddTaskPresenter @AssistedInject constructor(
     }
 
     fun timerSelected(hours: Int, minutes: Int, seconds: Int) {
+        currentTask.period = "$hours:$minutes:$seconds"
         setTimeFormatted("$hours:$minutes:$seconds", TimeTypes.TIMER)
     }
 
     fun timePreciseClicked() {
         setTime(Calendar.getInstance(), TimeTypes.PRECISE_TIME)
         viewState.showTimePicker(Calendar.getInstance(), TimeTypes.PRECISE_TIME)
+    }
+
+    fun okClicked(name: String) {
+        currentTask.name = name
+        taskRepository.saveTask(currentTask)
+        currentTask = Task()
     }
 
     fun backPressed(): Boolean {
@@ -84,9 +117,16 @@ class AddTaskPresenter @AssistedInject constructor(
     }
 
     fun setTime(time: Calendar, timeTypes: TimeTypes) {
-        time.getFormatted().let {
-            setTimeFormatted(it, timeTypes)
-        }
+        if (timeTypes == TimeTypes.INTERVAL_START)
+            currentTask.timeStart = time.time
+        if (timeTypes == TimeTypes.INTERVAL_END)
+            currentTask.timeEnd = time.time
+        if (timeTypes == TimeTypes.PRECISE_TIME)
+            time.time.let {
+                currentTask.timeStart = it
+                currentTask.timeEnd = it
+            }
+        setTimeFormatted(time.getTimeFormatted(), timeTypes)
     }
 
     private fun setTimeFormatted(timeFormatted: String, timeTypes: TimeTypes) {
@@ -99,11 +139,25 @@ class AddTaskPresenter @AssistedInject constructor(
             }
         }
     }
+
+    fun setCategory(categoryId: Long) {
+        currentTask = Task()
+        currentTask.categoryId = categoryId
+    }
+
 }
 
-fun Calendar.getFormatted(): String {
+fun Calendar.getTimeFormatted(): String {
     val formatter = SimpleDateFormat(
         "hh:mm:ss",
+        Locale.getDefault()
+    )
+    return formatter.format(this.time)
+}
+
+fun Calendar.getDateFormatted(): String {
+    val formatter = SimpleDateFormat(
+        "dd.MM.yy",
         Locale.getDefault()
     )
     return formatter.format(this.time)

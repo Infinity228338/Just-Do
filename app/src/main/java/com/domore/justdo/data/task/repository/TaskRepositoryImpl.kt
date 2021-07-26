@@ -16,4 +16,7 @@ class TaskRepositoryImpl
     override fun getTaskByCategoryId(id: Long): Single<List<Task>> =
         localTaskDataSource.getTaskByCategoryId(id)
 
+    override fun saveTask(task: Task): Single<Task> =
+        localTaskDataSource.saveTask(task)
+
 }

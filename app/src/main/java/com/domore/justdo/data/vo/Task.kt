@@ -3,6 +3,7 @@ package com.domore.justdo.data.vo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(
     foreignKeys = [ForeignKey(
@@ -17,7 +18,23 @@ import androidx.room.PrimaryKey
 )
 data class Task(
     @PrimaryKey(autoGenerate = true) val id: Long,
-    val name: String,
-    val modeId: Long,
-    val categoryId: Long
-)
+    var name: String?,
+    var modeId: Long?,
+    var categoryId: Long?,
+    var date: Date?,
+    var timeStart: Date?,
+    var timeEnd: Date?,
+    var period: String?
+) {
+    constructor() : this(
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    )
+}
+

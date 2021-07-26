@@ -21,4 +21,6 @@ interface AddTaskView : MvpView {
     fun processModeClick(modeType: ModeType, formatted: String)
     fun hideAllTimes()
     fun showTimerPicker()
+    fun processNameCardClick(cardTaskNameExpanded: Boolean)
+    fun setDate(dateFormatted: String)
 }

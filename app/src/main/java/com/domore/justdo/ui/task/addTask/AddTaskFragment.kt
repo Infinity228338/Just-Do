@@ -11,10 +11,7 @@ import com.domore.justdo.R
 import com.domore.justdo.data.vo.ModeType
 import com.domore.justdo.data.vo.TimeTypes
 import com.domore.justdo.databinding.FragmentAddTaskBinding
-import com.domore.justdo.ui.base.BackButtonListener
-import com.domore.justdo.ui.base.BaseFragment
-import com.domore.justdo.ui.base.getResColor
-import com.domore.justdo.ui.base.getVisibility
+import com.domore.justdo.ui.base.*
 import com.domore.justdo.ui.task.addTask.timepicker.TimePickerDialogFragment
 import moxy.ktx.moxyPresenter
 import java.util.*
@@ -38,6 +35,7 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
         super.onCreate(savedInstanceState)
         arguments?.let {
             categoryId = it.getLong(ARG_CATEGORY_ID)
+            presenter.setCategory(categoryId!!)
         }
     }
 
@@ -62,6 +60,23 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
 
     override fun init() {
         viewBinding?.apply {
+            cardTaskName.setOnClickListener {
+                presenter.cardTaskNameClicked()
+            }
+            editTaskName.apply {
+                setOnFocusChangeListener { _, hasFocus ->
+                    if (hasFocus)
+                        presenter.cardTaskNameClicked()
+                    else {
+                        hideKeyboard()
+                    }
+                }
+                setOnClickListener {
+                    presenter.cardTaskNameClicked()
+                }
+
+            }
+
             cardTaskMode.setOnClickListener {
                 presenter.cardTaskModeClicked()
             }
@@ -74,7 +89,7 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
             textPreciseTime.setOnClickListener {
                 presenter.modeClicked(ModeType.PRECISE_TIME)
             }
-            cardDate.setOnClickListener {
+            cardTaskDate.setOnClickListener {
                 presenter.dateClicked()
             }
             timeStart.setOnClickListener {
@@ -90,7 +105,13 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
             timePrecise.setOnClickListener {
                 presenter.timePreciseClicked()
             }
+            textCancel.setOnClickListener {
+                presenter.backPressed()
+            }
 
+            textOk.setOnClickListener {
+                presenter.okClicked(editTaskName.text.toString())
+            }
         }
     }
 
@@ -154,7 +175,7 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
                 if (shown) R.color.white else R.color.ultra_light_grey
             )
         viewBinding?.let {
-            TransitionManager.beginDelayedTransition(it.cardTaskMode)
+//            TransitionManager.beginDelayedTransition(it.cardTaskMode)
             it.textInterval.visibility = visibility
             it.textTimer.visibility = visibility
             it.textPreciseTime.visibility = visibility
@@ -162,6 +183,31 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
             it.cardTaskMode.setCardBackgroundColor(color)
         }
     }
+
+    override fun processNameCardClick(shown: Boolean) {
+        val color =
+            getResColor(
+                requireContext(),
+                if (shown) R.color.white else R.color.ultra_light_grey
+            )
+        val addIconRes = if (shown) R.drawable.ic_icon_check else R.drawable.ic_add_inactive
+        val itemsIconRes = if (shown) R.drawable.ic_icon_name else R.drawable.ic_icon_list
+        viewBinding?.apply {
+            TransitionManager.beginDelayedTransition(addTaskView)
+            cardTaskName.setCardBackgroundColor(color)
+            addIcon.setImageResource(addIconRes)
+            itemsIcon.setImageResource(itemsIconRes)
+            cardTaskMode.visibility = View.VISIBLE
+            cardTaskDate.visibility = View.VISIBLE
+            textCancel.visibility = View.VISIBLE
+            textOk.visibility = View.VISIBLE
+            editTaskName.also {
+                if (!shown) hideKeyboard()
+                it.isCursorVisible = shown
+            }
+        }
+    }
+
 
     override fun addItemToList(position: Int) {
         TODO("Not yet implemented")
@@ -221,6 +267,9 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
         viewBinding?.timeDuration?.text = formattedTime
     }
 
+    override fun setDate(dateFormatted: String) {
+        viewBinding?.textDateSelected?.text = dateFormatted
+    }
 
     override fun setPreciseText(formattedTime: String) {
         viewBinding?.timePrecise?.text = formattedTime

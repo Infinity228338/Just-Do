@@ -2,8 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_task_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".ui.task.addTask.AddTaskFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -30,25 +34,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rv_new_tasks">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/task_name"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/new_task"
-            android:textColorHint="@color/main_green"
-            app:endIconDrawable="@drawable/ic_add_24"
-            app:endIconMode="custom"
-            app:endIconTint="@color/main_green"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_new_tasks"
-            app:startIconDrawable="@drawable/ic_icon_list">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/input_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <ImageView
+                android:id="@+id/items_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_icon_list"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/text_new_task"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="5dp"-->
+            <!--                android:layout_marginTop="8dp"-->
+            <!--                android:text="@string/new_task"-->
+            <!--                android:textColor="@color/main_green_light"-->
+            <!--                app:layout_constraintStart_toEndOf="@+id/items_icon"-->
+            <!--                app:layout_constraintTop_toTopOf="parent" />-->
+
+            <EditText
+                android:id="@+id/edit_task_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="@string/new_task"
+                android:singleLine="true"
+                android:textColorHint="@color/main_green_light"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/add_icon"
+                app:layout_constraintStart_toEndOf="@+id/items_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/add_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="10dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_icon_add_mint"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -60,6 +96,7 @@
         android:layout_marginEnd="30dp"
         android:clickable="true"
         android:focusable="true"
+        android:visibility="gone"
         app:cardBackgroundColor="@color/ultra_light_grey"
         app:layout_constraintTop_toBottomOf="@+id/card_task_name">
 
@@ -81,6 +118,7 @@
                 android:id="@+id/text_mode_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/mode_and_time"
                 android:textColor="@color/main_green"
@@ -221,13 +259,14 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_date"
+        android:id="@+id/card_task_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:clickable="true"
         android:focusable="true"
+        android:visibility="gone"
         app:cardBackgroundColor="@color/ultra_light_grey"
         app:layout_constraintTop_toBottomOf="@+id/card_task_mode">
 
@@ -249,10 +288,20 @@
                 android:id="@+id/text_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/text_date"
                 android:textColor="@color/main_green"
                 app:layout_constraintStart_toEndOf="@+id/calendar_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_date_selected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toEndOf="@+id/text_date"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -267,8 +316,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="15dp"
         android:text="@string/text_cancel"
+        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/text_ok"
-        app:layout_constraintTop_toBottomOf="@+id/card_date" />
+        app:layout_constraintTop_toBottomOf="@+id/card_task_date" />
 
     <TextView
         android:id="@+id/text_ok"
@@ -278,8 +328,9 @@
         android:layout_marginEnd="30dp"
         android:text="@string/text_ok"
         android:textColor="@color/main_green"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_date" />
+        app:layout_constraintTop_toBottomOf="@+id/card_task_date" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

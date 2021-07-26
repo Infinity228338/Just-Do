@@ -16,4 +16,12 @@ class LocalTaskDataSourceImpl
     override fun getTaskById(id: Long): Single<Task> = taskDao.getTaskById(id)
 
     override fun getTaskByCategoryId(id: Long): Single<List<Task>> = taskDao.getTaskByCategoryId(id)
+
+    override fun saveTask(task: Task): Single<Task> =
+        taskDao
+            .retain(task)
+            .flatMap {
+                getTaskById(id = it)
+            }
+
 }
