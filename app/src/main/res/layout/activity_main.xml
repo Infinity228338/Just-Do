@@ -10,6 +10,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
         style="@style/justDoBottomNavigationView"
+        android:fitsSystemWindows="true"
         app:menu="@menu/menu_main" />
 
 </FrameLayout>

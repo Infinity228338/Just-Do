@@ -7,7 +7,7 @@
     android:layout_margin="10dp">
 
     <ImageView
-        android:id="@+id/category_icon"
+        android:id="@+id/task_icon"
         android:layout_width="@dimen/category_icon_size"
         android:layout_height="@dimen/category_icon_size"
         android:layout_margin="3dp"
@@ -17,26 +17,26 @@
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/category_name"
+        android:id="@+id/task_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/category_time"
+        app:layout_constraintEnd_toStartOf="@+id/task_time"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/category_icon"
+        app:layout_constraintStart_toEndOf="@+id/task_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/cities" />
 
     <TextView
-        android:id="@+id/category_time"
+        android:id="@+id/task_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/category_name"
+        app:layout_constraintStart_toEndOf="@+id/task_name"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/cities" />
 

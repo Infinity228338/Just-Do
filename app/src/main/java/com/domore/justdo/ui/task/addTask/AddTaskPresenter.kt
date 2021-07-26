@@ -7,6 +7,8 @@ import com.domore.justdo.data.vo.ModeType
 import com.domore.justdo.data.vo.Task
 import com.domore.justdo.data.vo.TimeTypes
 import com.domore.justdo.schedulers.Schedulers
+import com.domore.justdo.ui.task.listbase.TaskItemView
+import com.domore.justdo.ui.task.listbase.TaskListPresenter
 import com.github.terrakok.cicerone.Router
 import dagger.assisted.AssistedInject
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -26,10 +28,26 @@ class AddTaskPresenter @AssistedInject constructor(
     private var cardTaskNameExpanded = false
     private lateinit var currentTask: Task
 
+    class TaskListPresenterImpl : TaskListPresenter {
+        val tasks = mutableListOf<Task>()
+        override var itemClickListener: ((TaskItemView) -> Unit)? = null
+
+        override fun bindView(view: TaskItemView) {
+            view.bind(tasks[view.pos])
+        }
+
+        override fun getCount(): Int = tasks.size
+    }
+
+    val taskListPresenter = TaskListPresenterImpl()
+
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
+        taskListPresenter.itemClickListener = {
+
+        }
     }
 
     fun cardTaskNameClicked() {
@@ -38,7 +56,6 @@ class AddTaskPresenter @AssistedInject constructor(
     }
 
     fun cardTaskModeClicked() {
-        if (cardTaskNameExpanded) cardTaskNameClicked()
         cardTaskModeExpanded = !cardTaskModeExpanded
         viewState.showOrHideModes(cardTaskModeExpanded)
         viewState.hideAllTimes()
@@ -47,11 +64,13 @@ class AddTaskPresenter @AssistedInject constructor(
     }
 
     fun modeClicked(mode: ModeType) {
-        modeRepository
-            .getModeByName(mode.name)
-            .observeOn(schedulers.main())
-            .subscribeOn(schedulers.background())
-            .subscribe(::onModeLoaded)
+        disposables.add(
+            modeRepository
+                .getModeByName(mode.name)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(::onModeLoaded)
+        )
 
         viewState.hideAllTimes()
         viewState.processModeClick(
@@ -66,8 +85,6 @@ class AddTaskPresenter @AssistedInject constructor(
     }
 
     fun dateClicked() {
-        if (cardTaskNameExpanded) cardTaskNameClicked()
-        if (cardTaskModeExpanded) cardTaskModeClicked()
         viewState.showDatePicker(Calendar.getInstance())
     }
 
@@ -91,8 +108,11 @@ class AddTaskPresenter @AssistedInject constructor(
     }
 
     fun timerSelected(hours: Int, minutes: Int, seconds: Int) {
-        currentTask.period = "$hours:$minutes:$seconds"
-        setTimeFormatted("$hours:$minutes:$seconds", TimeTypes.TIMER)
+        "$hours:$minutes:$seconds".let {
+            currentTask.period = it
+            setTimeFormatted(it, TimeTypes.TIMER)
+        }
+
     }
 
     fun timePreciseClicked() {
@@ -102,8 +122,20 @@ class AddTaskPresenter @AssistedInject constructor(
 
     fun okClicked(name: String) {
         currentTask.name = name
-        taskRepository.saveTask(currentTask)
+        taskRepository
+            .saveTask(currentTask)
+            .observeOn(schedulers.main())
+            .subscribeOn(schedulers.background())
+            .subscribe(::onTaskSaved)
         currentTask = Task()
+    }
+
+    private fun onTaskSaved(task: Task) {
+        taskListPresenter.tasks.let {
+            it.add(task)
+            viewState.addItemToList(it.lastIndex)
+        }
+        cardTaskNameClicked()
     }
 
     fun backPressed(): Boolean {

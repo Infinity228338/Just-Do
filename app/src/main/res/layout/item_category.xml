@@ -7,7 +7,7 @@
     android:layout_marginTop="3dp">
 
     <ImageView
-        android:id="@+id/categoty_icon"
+        android:id="@+id/category_icon"
         android:layout_width="@dimen/category_icon_size"
         android:layout_height="@dimen/category_icon_size"
         app:layout_constraintEnd_toEndOf="parent"

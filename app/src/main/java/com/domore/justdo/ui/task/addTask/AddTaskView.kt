@@ -10,17 +10,23 @@ import java.util.*
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface AddTaskView : MvpView {
     fun init()
+
     fun showOrHideModes(shown: Boolean)
-    fun addItemToList(position: Int)
+    fun hideAllTimes()
+
     fun showDatePicker(date: Calendar)
     fun showTimePicker(time: Calendar, timeTypes: TimeTypes)
+    fun showTimerPicker()
+
     fun setTimeStartText(formattedTime: String)
     fun setTimeEndText(formattedTime: String)
     fun setTimerText(formattedTime: String)
     fun setPreciseText(formattedTime: String)
-    fun processModeClick(modeType: ModeType, formatted: String)
-    fun hideAllTimes()
-    fun showTimerPicker()
-    fun processNameCardClick(cardTaskNameExpanded: Boolean)
     fun setDate(dateFormatted: String)
+
+    fun processModeClick(modeType: ModeType, formatted: String)
+    fun processNameCardClick(cardTaskNameExpanded: Boolean)
+
+    fun addItemToList(position: Int)
+
 }

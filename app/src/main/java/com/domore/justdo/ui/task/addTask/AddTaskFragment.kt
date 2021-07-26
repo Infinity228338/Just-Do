@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
 import com.domore.justdo.R
 import com.domore.justdo.data.vo.ModeType
@@ -30,6 +31,7 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
     private val presenter: AddTaskPresenter by moxyPresenter {
         addTaskPresenterFactory.create()
     }
+    private var adapter: AddedTasksAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +46,12 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
         savedInstanceState: Bundle?
     ): View {
         activity?.title = getString(R.string.add_task)
+        adapter = AddedTasksAdapter(presenter.taskListPresenter)
         viewBinding = FragmentAddTaskBinding.inflate(inflater, container, false)
+        viewBinding?.rvNewTasks?.also {
+            it.layoutManager = LinearLayoutManager(context)
+            it.adapter = adapter
+        }
         return viewBinding!!.root
     }
 
@@ -190,6 +197,7 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
                 requireContext(),
                 if (shown) R.color.white else R.color.ultra_light_grey
             )
+        val visibility = getVisibility(shown)
         val addIconRes = if (shown) R.drawable.ic_icon_check else R.drawable.ic_add_inactive
         val itemsIconRes = if (shown) R.drawable.ic_icon_name else R.drawable.ic_icon_list
         viewBinding?.apply {
@@ -197,10 +205,10 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
             cardTaskName.setCardBackgroundColor(color)
             addIcon.setImageResource(addIconRes)
             itemsIcon.setImageResource(itemsIconRes)
-            cardTaskMode.visibility = View.VISIBLE
-            cardTaskDate.visibility = View.VISIBLE
-            textCancel.visibility = View.VISIBLE
-            textOk.visibility = View.VISIBLE
+            cardTaskMode.visibility = visibility
+            cardTaskDate.visibility = visibility
+            textCancel.visibility = visibility
+            textOk.visibility = visibility
             editTaskName.also {
                 if (!shown) hideKeyboard()
                 it.isCursorVisible = shown
@@ -210,7 +218,7 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
 
 
     override fun addItemToList(position: Int) {
-        TODO("Not yet implemented")
+        adapter?.notifyItemInserted(position)
     }
 
     override fun showDatePicker(date: Calendar) {

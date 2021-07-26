@@ -17,7 +17,7 @@
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/category_name"
+        android:id="@+id/task_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
@@ -28,12 +28,12 @@
         tools:text="@tools:sample/cities" />
 
     <TextView
-        android:id="@+id/category_time"
+        android:id="@+id/task_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/category_icon"
-        app:layout_constraintTop_toBottomOf="@+id/category_name"
+        app:layout_constraintTop_toBottomOf="@+id/task_name"
         tools:text="@tools:sample/cities" />
 
     <ImageView

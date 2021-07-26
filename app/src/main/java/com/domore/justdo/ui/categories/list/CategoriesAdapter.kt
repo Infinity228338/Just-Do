@@ -42,7 +42,7 @@ class CategoriesAdapter(val presenter: CategoriesListPresenter) :
                 category.name ?: itemView.context.getString(category.nameRes)
             val iconRes =
                 if (category.iconResId == 0) R.drawable.ic_icon_list else category.iconResId
-            binding.categotyIcon.also {
+            binding.categoryIcon.also {
                 it.setImageDrawable(
                     AppCompatResources.getDrawable(
                         itemView.context,
