@@ -4,37 +4,43 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-  <group android:scaleX="0.4995"
-      android:scaleY="0.4995"
-      android:translateX="14.04"
-      android:translateY="14.04">
-    <path
-        android:pathData="M32,0L128,0A32,32 0,0 1,160 32L160,128A32,32 0,0 1,128 160L32,160A32,32 0,0 1,0 128L0,32A32,32 0,0 1,32 0z">
-      <aapt:attr name="android:fillColor">
-        <gradient 
-            android:startY="156.183"
-            android:startX="104.307"
-            android:endY="3.60608"
-            android:endX="55.6321"
-            android:type="linear">
-          <item android:offset="0" android:color="#FF0C4934"/>
-          <item android:offset="0.6196" android:color="#FF118059"/>
-          <item android:offset="1" android:color="#FF128F63"/>
-        </gradient>
-      </aapt:attr>
-    </path>
-    <path
-        android:pathData="M49.193,133.151H77.382C110.381,133.151 131.507,113.486 131.507,80.548C131.507,47.61 110.381,28.372 77.382,28.372H49.193C42.983,28.372 37.991,33.364 37.991,39.574V39.635V122.009V122.07C37.991,128.158 42.983,133.151 49.193,133.151Z"
-        android:fillColor="#ffffff"/>
-    <path
-        android:pathData="M49.193,133.151H77.382C110.381,133.151 131.507,113.486 131.507,80.548C131.507,72.268 130.167,64.84 127.671,58.387L37.991,104.475V121.887V121.948C37.991,128.158 42.983,133.151 49.193,133.151Z"
-        android:fillColor="#ECECEC"/>
-    <path
-        android:pathData="M56.195,95.172C57.778,107.288 67.945,113.315 78.234,113.315C89.254,113.315 100.396,106.374 100.396,91.762V72.402L84.14,80.743V91.397C84.14,96.207 81.705,98.46 78.174,98.46C73.607,98.46 72.146,94.685 72.146,90.484V86.953L56.195,95.172Z"
-        android:fillColor="#128F63"/>
-    <path
-        android:pathData="M84.141,80.743V64.487H68.129L76.531,48.231H84.141H84.385H100.397V64.487V72.402L84.141,80.743Z"
-        android:fillColor="#F8C478"
-        android:fillType="evenOdd"/>
-  </group>
+    <group
+        android:scaleX="0.4995"
+        android:scaleY="0.4995"
+        android:translateX="14.04"
+        android:translateY="14.04">
+        <path android:pathData="M32,0L128,0A32,32 0,0 1,160 32L160,128A32,32 0,0 1,128 160L32,160A32,32 0,0 1,0 128L0,32A32,32 0,0 1,32 0z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:endX="55.6321"
+                    android:endY="3.60608"
+                    android:startX="104.307"
+                    android:startY="156.183"
+                    android:type="linear">
+                    <item
+                        android:color="#FF0C4934"
+                        android:offset="0" />
+                    <item
+                        android:color="#FF118059"
+                        android:offset="0.6196" />
+                    <item
+                        android:color="#FF128F63"
+                        android:offset="1" />
+                </gradient>
+            </aapt:attr>
+        </path>
+        <path
+            android:fillColor="#ffffff"
+            android:pathData="M49.193,133.151H77.382C110.381,133.151 131.507,113.486 131.507,80.548C131.507,47.61 110.381,28.372 77.382,28.372H49.193C42.983,28.372 37.991,33.364 37.991,39.574V39.635V122.009V122.07C37.991,128.158 42.983,133.151 49.193,133.151Z" />
+        <path
+            android:fillColor="#ECECEC"
+            android:pathData="M49.193,133.151H77.382C110.381,133.151 131.507,113.486 131.507,80.548C131.507,72.268 130.167,64.84 127.671,58.387L37.991,104.475V121.887V121.948C37.991,128.158 42.983,133.151 49.193,133.151Z" />
+        <path
+            android:fillColor="#128F63"
+            android:pathData="M56.195,95.172C57.778,107.288 67.945,113.315 78.234,113.315C89.254,113.315 100.396,106.374 100.396,91.762V72.402L84.14,80.743V91.397C84.14,96.207 81.705,98.46 78.174,98.46C73.607,98.46 72.146,94.685 72.146,90.484V86.953L56.195,95.172Z" />
+        <path
+            android:fillColor="#F8C478"
+            android:fillType="evenOdd"
+            android:pathData="M84.141,80.743V64.487H68.129L76.531,48.231H84.141H84.385H100.397V64.487V72.402L84.141,80.743Z" />
+    </group>
 </vector>

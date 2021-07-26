@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="radius_small">20dp</dimen>
+    <dimen name="radius_smaller">15dp</dimen>
+    <dimen name="no_tasks_dimen">250dp</dimen>
+
+    <dimen name="category_item_size">70dp</dimen>
+    <dimen name="category_icon_size">44dp</dimen>
+    <dimen name="task_item_size">72dp</dimen>
+
+    <dimen name="category_icon_size_big">55</dimen>
+    <dimen name="task_item_size_oneline">56dp</dimen>
+    <dimen name="bottom_nav_height">70dp</dimen>
+    <dimen name="category_text_size">12sp</dimen>
+    <dimen name="icons_add_cat_size">30dp</dimen>
+    <dimen name="icons_margin">5dp</dimen>
+    <dimen name="text_ad_category_margin">15dp</dimen>
+    <dimen name="button_margin_top">5dp</dimen>
+    <dimen name="button_margin_end">15dp</dimen>
+</resources>

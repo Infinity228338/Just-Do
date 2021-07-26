@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_rounded_white">
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/number_picker_hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:np_dividerColor="@color/main_green"
+        app:np_height="150dp"
+        app:np_max="24"
+        app:np_min="0"
+        app:np_selectedTextColor="@color/main_green"
+        app:np_textColor="@color/main_green_light"
+        app:np_value="0"
+        app:np_width="50dp" />
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/number_picker_minutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/number_picker_hours"
+        app:layout_constraintTop_toTopOf="parent"
+        app:np_dividerColor="@color/main_green"
+        app:np_height="150dp"
+        app:np_max="59"
+        app:np_min="0"
+        app:np_selectedTextColor="@color/main_green"
+        app:np_textColor="@color/main_green_light"
+        app:np_value="0"
+        app:np_width="50dp" />
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/number_picker_seconds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/number_picker_minutes"
+        app:layout_constraintTop_toTopOf="parent"
+        app:np_dividerColor="@color/main_green"
+        app:np_height="150dp"
+        app:np_max="59"
+        app:np_min="0"
+        app:np_selectedTextColor="@color/main_green"
+        app:np_textColor="@color/main_green_light"
+        app:np_value="0"
+        app:np_width="50dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_add"
+        style="@style/GreenMaterialButton.Ok"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/number_picker_minutes" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CategoryText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/category_text_size</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="GreenText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/main_green</item>
+    </style>
+
+    <style name="GreenText.MarginStart" parent="GreenText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/text_ad_category_margin</item>
+        <item name="android:textColor">@color/main_green</item>
+    </style>
+
+    <style name="HeaderGreenText" parent="GreenText">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="HeaderGreenText.TwoLInes">
+        <item name="android:lines">2</item>
+        <item name="android:maxLines">2</item>
+    </style>
+
+    <style name="CategoryAddIcons">
+        <item name="android:layout_width">@dimen/icons_add_cat_size</item>
+        <item name="android:layout_height">@dimen/icons_add_cat_size</item>
+        <item name="android:layout_margin">@dimen/icons_margin</item>
+    </style>
+
+    <style name="justDoBottomNavigationView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/bottom_nav_height</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:background">@drawable/background_bottom_view</item>
+        <item name="labelVisibilityMode">unlabeled</item>
+    </style>
+
+    <style name="PickerRecyclerView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/text_ad_category_margin</item>
+        <item name="android:layout_marginEnd">@dimen/text_ad_category_margin</item>
+        <item name="layoutManager">androidx.recyclerview.widget.GridLayoutManager</item>
+        <item name="spanCount">7</item>
+    </style>
+
+    <style name="GreenMaterialButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/main_green</item>
+        <item name="android:layout_marginTop">@dimen/button_margin_top</item>
+        <item name="android:layout_marginEnd">@dimen/button_margin_end</item>
+        <item name="android:layout_marginBottom">@dimen/button_margin_top</item>
+    </style>
+
+    <style name="GreenMaterialButton.Ok" parent="GreenMaterialButton">
+        <item name="android:text">@string/ok</item>
+    </style>
+
+</resources>
