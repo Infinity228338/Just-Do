@@ -32,6 +32,9 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
         addTaskPresenterFactory.create()
     }
     private var adapter: AddedTasksAdapter? = null
+    lateinit var cardViews: List<View>
+    lateinit var modeViews: List<View>
+    lateinit var timeViews: List<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,9 +51,34 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
         activity?.title = getString(R.string.add_task)
         adapter = AddedTasksAdapter(presenter.taskListPresenter)
         viewBinding = FragmentAddTaskBinding.inflate(inflater, container, false)
-        viewBinding?.rvNewTasks?.also {
-            it.layoutManager = LinearLayoutManager(context)
-            it.adapter = adapter
+        viewBinding?.apply {
+            cardViews = listOf(
+                timeIcon,
+                textModeTime,
+                barrier,
+                calendarIcon,
+                textDate,
+                textDateSelected,
+                textCancel,
+                textOk
+            )
+            modeViews = listOf(
+                textInterval, textTimer, textPreciseTime
+            )
+            timeViews = listOf(
+                textStart,
+                timeStart,
+                textEnd,
+                timeEnd,
+                textDuration,
+                timeDuration,
+                textPrecise,
+                timePrecise
+            )
+            rvNewTasks.also {
+                it.layoutManager = LinearLayoutManager(context)
+                it.adapter = adapter
+            }
         }
         return viewBinding!!.root
     }
@@ -67,25 +95,17 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
 
     override fun init() {
         viewBinding?.apply {
-            cardTaskName.setOnClickListener {
-                presenter.cardTaskNameClicked()
+            cardTask.setOnClickListener {
+                presenter.cardTaskClicked()
             }
             editTaskName.apply {
                 setOnFocusChangeListener { _, hasFocus ->
                     if (hasFocus)
-                        presenter.cardTaskNameClicked()
+                        presenter.cardTaskClicked()
                     else {
                         hideKeyboard()
                     }
                 }
-                setOnClickListener {
-                    presenter.cardTaskNameClicked()
-                }
-
-            }
-
-            cardTaskMode.setOnClickListener {
-                presenter.cardTaskModeClicked()
             }
             textInterval.setOnClickListener {
                 presenter.modeClicked(ModeType.INTERVAL)
@@ -95,9 +115,6 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
             }
             textPreciseTime.setOnClickListener {
                 presenter.modeClicked(ModeType.PRECISE_TIME)
-            }
-            cardTaskDate.setOnClickListener {
-                presenter.dateClicked()
             }
             timeStart.setOnClickListener {
                 presenter.timeStartClicked()
@@ -119,12 +136,59 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
             textOk.setOnClickListener {
                 presenter.okClicked(editTaskName.text.toString())
             }
+            listOf(timeIcon, textModeTime).forEach {
+                it.setOnClickListener { presenter.modeSelectorClicked() }
+            }
+            listOf(calendarIcon, textDate, textDateSelected).forEach {
+                it.setOnClickListener { presenter.dateClicked() }
+            }
+        }
+    }
+
+    override fun expandOrCollapseCard(shown: Boolean) {
+        val color =
+            getResColor(
+                requireContext(),
+                if (shown) R.color.white else R.color.ultra_light_grey
+            )
+        val visibility = getVisibility(shown)
+        val addIconRes = if (shown) R.drawable.ic_icon_check else R.drawable.ic_add_inactive
+        val itemsIconRes = if (shown) R.drawable.ic_icon_name else R.drawable.ic_icon_list
+        val text =
+            requireContext()
+                .getString(if (shown) R.string.choose_mode else R.string.mode_and_time)
+        viewBinding?.apply {
+            TransitionManager.beginDelayedTransition(addTaskView)
+            cardTask.setCardBackgroundColor(color)
+            addIcon.setImageResource(addIconRes)
+            itemsIcon.setImageResource(itemsIconRes)
+            if (!shown) timeViews.forEach { it.visibility = visibility }
+            if (!shown) modeViews.forEach { it.visibility = visibility }
+            cardViews.forEach { it.visibility = visibility }
+            editTaskName.also {
+                if (!shown) hideKeyboard()
+                it.isCursorVisible = shown
+            }
+        }
+    }
+
+    override fun showOrHideModes(shown: Boolean) {
+        val visibility = getVisibility(shown)
+        val text =
+            requireContext()
+                .getString(if (shown) R.string.choose_mode else R.string.mode_and_time)
+        viewBinding?.let {
+            TransitionManager.beginDelayedTransition(it.cardTask)
+            modeViews.forEach { view ->
+                view.visibility = visibility
+            }
+            it.textModeTime.text = text
         }
     }
 
     override fun processModeClick(modeType: ModeType, formatted: String) {
         viewBinding?.let {
-            TransitionManager.beginDelayedTransition(it.cardTaskMode)
+            TransitionManager.beginDelayedTransition(it.cardTask)
             val color = resources.getColor(R.color.main_green)
             when (modeType) {
                 ModeType.INTERVAL -> {
@@ -152,17 +216,13 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
         }
     }
 
+
     override fun hideAllTimes() {
         viewBinding?.let {
-            TransitionManager.beginDelayedTransition(it.cardTaskMode)
-            it.textStart.visibility = View.GONE
-            it.timeStart.visibility = View.GONE
-            it.textEnd.visibility = View.GONE
-            it.timeEnd.visibility = View.GONE
-            it.textDuration.visibility = View.GONE
-            it.timeDuration.visibility = View.GONE
-            it.textPrecise.visibility = View.GONE
-            it.timePrecise.visibility = View.GONE
+            TransitionManager.beginDelayedTransition(it.cardTask)
+            timeViews.forEach { view ->
+                view.visibility = View.GONE
+            }
             resources.getColor(R.color.main_green_light).let { color ->
                 it.textInterval.setTextColor(color)
                 it.textTimer.setTextColor(color)
@@ -170,52 +230,6 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
             }
         }
     }
-
-    override fun showOrHideModes(shown: Boolean) {
-        val visibility = getVisibility(shown)
-        val text =
-            requireContext()
-                .getString(if (shown) R.string.choose_mode else R.string.mode_and_time)
-        val color =
-            getResColor(
-                requireContext(),
-                if (shown) R.color.white else R.color.ultra_light_grey
-            )
-        viewBinding?.let {
-//            TransitionManager.beginDelayedTransition(it.cardTaskMode)
-            it.textInterval.visibility = visibility
-            it.textTimer.visibility = visibility
-            it.textPreciseTime.visibility = visibility
-            it.textModeTime.text = text
-            it.cardTaskMode.setCardBackgroundColor(color)
-        }
-    }
-
-    override fun processNameCardClick(shown: Boolean) {
-        val color =
-            getResColor(
-                requireContext(),
-                if (shown) R.color.white else R.color.ultra_light_grey
-            )
-        val visibility = getVisibility(shown)
-        val addIconRes = if (shown) R.drawable.ic_icon_check else R.drawable.ic_add_inactive
-        val itemsIconRes = if (shown) R.drawable.ic_icon_name else R.drawable.ic_icon_list
-        viewBinding?.apply {
-            TransitionManager.beginDelayedTransition(addTaskView)
-            cardTaskName.setCardBackgroundColor(color)
-            addIcon.setImageResource(addIconRes)
-            itemsIcon.setImageResource(itemsIconRes)
-            cardTaskMode.visibility = visibility
-            cardTaskDate.visibility = visibility
-            textCancel.visibility = visibility
-            textOk.visibility = visibility
-            editTaskName.also {
-                if (!shown) hideKeyboard()
-                it.isCursorVisible = shown
-            }
-        }
-    }
-
 
     override fun addItemToList(position: Int) {
         adapter?.notifyItemInserted(position)

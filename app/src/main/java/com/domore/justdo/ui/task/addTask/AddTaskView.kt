@@ -11,7 +11,6 @@ import java.util.*
 interface AddTaskView : MvpView {
     fun init()
 
-    fun showOrHideModes(shown: Boolean)
     fun hideAllTimes()
 
     fun showDatePicker(date: Calendar)
@@ -25,8 +24,9 @@ interface AddTaskView : MvpView {
     fun setDate(dateFormatted: String)
 
     fun processModeClick(modeType: ModeType, formatted: String)
-    fun processNameCardClick(cardTaskNameExpanded: Boolean)
+    fun expandOrCollapseCard(cardTaskNameExpanded: Boolean)
 
     fun addItemToList(position: Int)
+    fun showOrHideModes(modesExpanded: Boolean)
 
 }

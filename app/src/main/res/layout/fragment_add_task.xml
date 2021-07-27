@@ -30,7 +30,7 @@
             tools:listitem="@layout/item_task_oneline" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_task_name"
+            android:id="@+id/card_task"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
@@ -56,26 +56,15 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!--            <TextView-->
-                <!--                android:id="@+id/text_new_task"-->
-                <!--                android:layout_width="wrap_content"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:layout_marginStart="5dp"-->
-                <!--                android:layout_marginTop="8dp"-->
-                <!--                android:text="@string/new_task"-->
-                <!--                android:textColor="@color/main_green_light"-->
-                <!--                app:layout_constraintStart_toEndOf="@+id/items_icon"-->
-                <!--                app:layout_constraintTop_toTopOf="parent" />-->
-
                 <EditText
                     android:id="@+id/edit_task_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:background="@android:color/transparent"
                     android:hint="@string/new_task"
                     android:singleLine="true"
                     android:textColorHint="@color/main_green_light"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/add_icon"
                     app:layout_constraintStart_toEndOf="@+id/items_icon"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -90,26 +79,6 @@
                     android:src="@drawable/ic_icon_add_mint"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_task_mode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/ultra_light_grey"
-            app:layout_constraintTop_toBottomOf="@+id/card_task_name">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/time_icon"
@@ -118,8 +87,9 @@
                     android:layout_margin="3dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_icon_timer"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/items_icon" />
 
                 <TextView
                     android:id="@+id/text_mode_time"
@@ -129,8 +99,9 @@
                     android:layout_marginTop="8dp"
                     android:text="@string/mode_and_time"
                     android:textColor="@color/main_green"
+                    android:visibility="gone"
                     app:layout_constraintStart_toEndOf="@+id/time_icon"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/items_icon" />
 
                 <TextView
                     android:id="@+id/text_interval"
@@ -235,7 +206,7 @@
                     android:layout_marginTop="5dp"
                     android:visibility="gone"
                     app:layout_constraintStart_toEndOf="@id/text_duration"
-                    app:layout_constraintTop_toBottomOf="@+id/text_start"
+                    app:layout_constraintTop_toBottomOf="@+id/text_precise_time"
                     tools:text="@tools:sample/date/hhmmss" />
 
                 <TextView
@@ -260,26 +231,13 @@
                     app:layout_constraintTop_toBottomOf="@+id/text_interval"
                     tools:text="@tools:sample/date/hhmmss" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_task_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/ultra_light_grey"
-            app:layout_constraintTop_toBottomOf="@+id/card_task_mode">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="text_mode_time,time_precise,time_end,time_duration" />
 
                 <ImageView
                     android:id="@+id/calendar_icon"
@@ -288,8 +246,9 @@
                     android:layout_margin="3dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_icon_calendar"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/barrier" />
 
                 <TextView
                     android:id="@+id/text_date"
@@ -299,8 +258,9 @@
                     android:layout_marginTop="8dp"
                     android:text="@string/text_date"
                     android:textColor="@color/main_green"
+                    android:visibility="gone"
                     app:layout_constraintStart_toEndOf="@+id/calendar_icon"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/barrier" />
 
                 <TextView
                     android:id="@+id/text_date_selected"
@@ -308,8 +268,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="8dp"
+                    android:visibility="gone"
                     app:layout_constraintStart_toEndOf="@+id/text_date"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/barrier"
+                    tools:text="@tools:sample/date/ddmmyy" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -325,7 +287,7 @@
             android:text="@string/text_cancel"
             android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@id/text_ok"
-            app:layout_constraintTop_toBottomOf="@+id/card_task_date" />
+            app:layout_constraintTop_toBottomOf="@+id/card_task" />
 
         <TextView
             android:id="@+id/text_ok"
@@ -337,7 +299,7 @@
             android:textColor="@color/main_green"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_task_date" />
+            app:layout_constraintTop_toBottomOf="@+id/card_task" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

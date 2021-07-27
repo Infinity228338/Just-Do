@@ -24,8 +24,8 @@ class AddTaskPresenter @AssistedInject constructor(
 ) : MvpPresenter<AddTaskView>() {
 
     private var disposables = CompositeDisposable()
-    private var cardTaskModeExpanded = false
-    private var cardTaskNameExpanded = false
+    private var modesExpanded = false
+    private var cardTaskExpanded = false
     private lateinit var currentTask: Task
 
     class TaskListPresenterImpl : TaskListPresenter {
@@ -50,16 +50,16 @@ class AddTaskPresenter @AssistedInject constructor(
         }
     }
 
-    fun cardTaskNameClicked() {
-        cardTaskNameExpanded = !cardTaskNameExpanded
-        viewState.processNameCardClick(cardTaskNameExpanded)
+    fun cardTaskClicked() {
+        cardTaskExpanded = !cardTaskExpanded
+        viewState.expandOrCollapseCard(cardTaskExpanded)
     }
 
-    fun cardTaskModeClicked() {
-        cardTaskModeExpanded = !cardTaskModeExpanded
-        viewState.showOrHideModes(cardTaskModeExpanded)
+    fun modeSelectorClicked() {
+        modesExpanded = !modesExpanded
+        viewState.showOrHideModes(modesExpanded)
         viewState.hideAllTimes()
-        if (cardTaskModeExpanded)
+        if (modesExpanded)
             modeClicked(ModeType.INTERVAL)
     }
 
@@ -135,7 +135,7 @@ class AddTaskPresenter @AssistedInject constructor(
             it.add(task)
             viewState.addItemToList(it.lastIndex)
         }
-        cardTaskNameClicked()
+        cardTaskClicked()
     }
 
     fun backPressed(): Boolean {
