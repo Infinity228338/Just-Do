@@ -7,12 +7,12 @@ import com.domore.justdo.data.vo.*
 import com.domore.justdo.getDateFormatted
 import com.domore.justdo.getTimeFormatted
 import com.domore.justdo.schedulers.Schedulers
+import com.domore.justdo.ui.JustDoScreensImpl
 import com.domore.justdo.ui.task.TaskItemView
 import com.github.terrakok.cicerone.Router
 import dagger.assisted.AssistedInject
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import moxy.MvpPresenter
-import java.text.SimpleDateFormat
 import java.util.*
 
 class AddTaskPresenter @AssistedInject constructor(
@@ -27,7 +27,7 @@ class AddTaskPresenter @AssistedInject constructor(
     private var modesExpanded = false
     private var cardTaskExpanded = false
     private lateinit var currentTask: Task
-    private lateinit var currentCategory: Category
+    private var currentCategory: Category? = null
 
     inner class TaskListPresenterImpl : AddedTasksListPresenter {
         val tasks = mutableListOf<Task>()
@@ -40,7 +40,7 @@ class AddTaskPresenter @AssistedInject constructor(
         }
 
         override fun editIconClick(pos: Int) {
-
+            currentTask = tasks[pos]
         }
 
         override fun deleteIconClick(pos: Int) {
@@ -59,10 +59,10 @@ class AddTaskPresenter @AssistedInject constructor(
 
     val taskListPresenter = TaskListPresenterImpl()
 
-
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
+        currentTask = Task()
 //        taskListPresenter.itemClickListener = {
 //            it.itemClicked(taskListPresenter.tasks[it.pos])
 //        }
@@ -71,6 +71,7 @@ class AddTaskPresenter @AssistedInject constructor(
 
     fun cardTaskClicked() {
         cardTaskExpanded = !cardTaskExpanded
+        if (cardTaskExpanded && currentCategory == null) setCategory(-1L)
         viewState.expandOrCollapseCard(cardTaskExpanded)
     }
 
@@ -86,7 +87,7 @@ class AddTaskPresenter @AssistedInject constructor(
         disposables.add(
             modeRepository
                 .getModeByName(mode.name)
-                .observeOn(schedulers.main())
+                .observeOn(schedulers.background())
                 .subscribeOn(schedulers.background())
                 .subscribe(::onModeLoaded)
         )
@@ -97,6 +98,14 @@ class AddTaskPresenter @AssistedInject constructor(
             if (mode == ModeType.TIMER) "00:00:00"
             else Calendar.getInstance().getTimeFormatted()
         )
+    }
+
+    fun addIconClicked(name: String) {
+        if (cardTaskExpanded && name.isNotBlank())
+            okClicked(name)
+        else {
+            cardTaskClicked()
+        }
     }
 
     private fun onModeLoaded(mode: Mode) {
@@ -146,8 +155,6 @@ class AddTaskPresenter @AssistedInject constructor(
             .observeOn(schedulers.main())
             .subscribeOn(schedulers.background())
             .subscribe(::onTaskSaved)
-        currentTask = Task()
-        currentTask.iconResId = currentCategory.iconResId
     }
 
     private fun onTaskSaved(task: Task) {
@@ -156,6 +163,8 @@ class AddTaskPresenter @AssistedInject constructor(
             viewState.addItemToList(it.lastIndex)
         }
         cardTaskClicked()
+        currentTask = Task()
+        currentCategory = null
     }
 
     fun backPressed(): Boolean {
@@ -193,16 +202,22 @@ class AddTaskPresenter @AssistedInject constructor(
     }
 
     fun setCategory(categoryId: Long) {
-        currentTask = Task()
-        currentTask.categoryId = categoryId
-        categoryRepository
-            .getCategoryById(categoryId)
-            .subscribeOn(schedulers.background())
-            .observeOn(schedulers.background())
-            .subscribe { category ->
-                currentCategory = category
-                currentTask.iconResId = category.iconResId
+        if (categoryId == -1L) {
+            router.setResultListener("kek_lol") {
+                setCategory(it as Long)
             }
+            router.navigateTo(JustDoScreensImpl.categoriesScreen())
+        } else {
+            currentTask?.categoryId = categoryId
+            categoryRepository
+                .getCategoryById(categoryId)
+                .subscribeOn(schedulers.background())
+                .observeOn(schedulers.background())
+                .subscribe { category ->
+                    currentCategory = category
+                    currentTask.iconResId = category.iconResId
+                }
+        }
     }
 }
 

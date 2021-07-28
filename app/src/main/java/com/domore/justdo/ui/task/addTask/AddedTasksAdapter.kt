@@ -42,7 +42,17 @@ class AddedTasksAdapter(val presenter: AddedTasksListPresenter) :
         override fun bind(task: Task) {
             binding.taskName.text = task.name
             binding.editIcon.setOnClickListener {
-                presenter.editIconClick(pos)
+                binding.apply {
+                    timeIcon.visibility = View.VISIBLE
+                    textModeTime.visibility = View.VISIBLE
+                    textInterval.visibility = View.VISIBLE
+                    textTimer.visibility = View.VISIBLE
+                    textPreciseTime.visibility = View.VISIBLE
+                    barrier.visibility = View.VISIBLE
+                    calendarIcon.visibility = View.VISIBLE
+                    textDate.visibility = View.VISIBLE
+                    textDateSelected.visibility = View.VISIBLE
+                }
             }
             binding.deleteIcon.setOnClickListener {
                 presenter.deleteIconClick(pos)

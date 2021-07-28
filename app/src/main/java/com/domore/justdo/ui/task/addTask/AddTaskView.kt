@@ -4,6 +4,7 @@ import com.domore.justdo.data.vo.ModeType
 import com.domore.justdo.data.vo.TimeTypes
 import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
+import moxy.viewstate.strategy.SkipStrategy
 import moxy.viewstate.strategy.StateStrategyType
 import java.util.*
 
@@ -13,8 +14,13 @@ interface AddTaskView : MvpView {
 
     fun hideAllTimes()
 
+    @StateStrategyType(SkipStrategy::class)
     fun showDatePicker(date: Calendar)
+
+    @StateStrategyType(SkipStrategy::class)
     fun showTimePicker(time: Calendar, timeTypes: TimeTypes)
+
+    @StateStrategyType(SkipStrategy::class)
     fun showTimerPicker()
 
     fun setTimeStartText(formattedTime: String)

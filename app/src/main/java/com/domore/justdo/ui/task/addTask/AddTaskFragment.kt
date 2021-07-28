@@ -24,6 +24,7 @@ const val ARG_CATEGORY_ID = "category_id"
 class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, BackButtonListener,
     TimePickerDialogFragment.OnTimeSelectedListener {
 
+
     @Inject
     lateinit var addTaskPresenterFactory: AddTaskPresenterFactory
     private var viewBinding: FragmentAddTaskBinding? = null
@@ -102,6 +103,7 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
                 setOnFocusChangeListener { _, hasFocus ->
                     if (!hasFocus)
                         hideKeyboard()
+
                 }
             }
 
@@ -129,6 +131,10 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
             }
             textCancel.setOnClickListener {
                 presenter.backPressed()
+            }
+
+            addIcon.setOnClickListener {
+                presenter.addIconClicked(editTaskName.text.toString())
             }
 
             textOk.setOnClickListener {

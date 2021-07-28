@@ -58,6 +58,4 @@ class TimePickerDialogFragment : DialogFragment() {
         fun newInstance() =
             TimePickerDialogFragment()
     }
-
-
 }
