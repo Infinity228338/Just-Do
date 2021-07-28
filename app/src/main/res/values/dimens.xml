@@ -8,7 +8,7 @@
     <dimen name="category_icon_size">44dp</dimen>
     <dimen name="task_item_size">72dp</dimen>
 
-    <dimen name="category_icon_size_big">55</dimen>
+    <dimen name="category_icon_size_big">55dp</dimen>
     <dimen name="task_item_size_oneline">56dp</dimen>
     <dimen name="bottom_nav_height">70dp</dimen>
     <dimen name="category_text_size">12sp</dimen>

@@ -1,4 +1,4 @@
-package com.domore.justdo.ui.task.listbase
+package com.domore.justdo.ui.task
 
 import com.domore.justdo.data.vo.Task
 import com.domore.justdo.ui.base.ItemView

@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.domore.justdo.R
 import com.domore.justdo.data.vo.Task
 import com.domore.justdo.databinding.ItemTaskOnelineBinding
-import com.domore.justdo.ui.task.listbase.TaskItemView
-import com.domore.justdo.ui.task.listbase.TaskListPresenter
+import com.domore.justdo.ui.task.TaskItemView
 
-class AddedTasksAdapter(val presenter: TaskListPresenter) :
+class AddedTasksAdapter(val presenter: AddedTasksListPresenter) :
     RecyclerView.Adapter<AddedTasksAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(

@@ -4,9 +4,10 @@ import com.domore.justdo.data.category.repository.CategoryRepository
 import com.domore.justdo.data.mode.repository.ModeRepository
 import com.domore.justdo.data.task.repository.TaskRepository
 import com.domore.justdo.data.vo.*
+import com.domore.justdo.getDateFormatted
+import com.domore.justdo.getTimeFormatted
 import com.domore.justdo.schedulers.Schedulers
-import com.domore.justdo.ui.task.listbase.TaskItemView
-import com.domore.justdo.ui.task.listbase.TaskListPresenter
+import com.domore.justdo.ui.task.TaskItemView
 import com.github.terrakok.cicerone.Router
 import dagger.assisted.AssistedInject
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -28,7 +29,7 @@ class AddTaskPresenter @AssistedInject constructor(
     private lateinit var currentTask: Task
     private lateinit var currentCategory: Category
 
-    inner class TaskListPresenterImpl : TaskListPresenter {
+    inner class TaskListPresenterImpl : AddedTasksListPresenter {
         val tasks = mutableListOf<Task>()
         override var selectedItemPos = -1
 
@@ -205,18 +206,3 @@ class AddTaskPresenter @AssistedInject constructor(
     }
 }
 
-fun Calendar.getTimeFormatted(): String {
-    val formatter = SimpleDateFormat(
-        "hh:mm:ss",
-        Locale.getDefault()
-    )
-    return formatter.format(this.time)
-}
-
-fun Calendar.getDateFormatted(): String {
-    val formatter = SimpleDateFormat(
-        "dd.MM.yy",
-        Locale.getDefault()
-    )
-    return formatter.format(this.time)
-}

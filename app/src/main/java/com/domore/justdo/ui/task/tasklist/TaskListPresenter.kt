@@ -1,6 +1,9 @@
 package com.domore.justdo.ui.task.tasklist
 
-import moxy.MvpPresenter
+import com.domore.justdo.ui.base.IListPresenter
+import com.domore.justdo.ui.task.TaskItemView
 
-class TaskListPresenter : MvpPresenter<TaskListView>() {
+interface TaskListPresenter : IListPresenter<TaskItemView> {
+
+
 }

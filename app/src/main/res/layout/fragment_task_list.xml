@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.task.tasklist.TaskListFragment">
+    tools:context=".ui.task.tasklist.TasksFragment">
 
     <TextView
         android:id="@+id/no_tasks_tv"
@@ -33,7 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/item_category" />
 </androidx.constraintlayout.widget.ConstraintLayout>

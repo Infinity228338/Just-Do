@@ -3,7 +3,7 @@ package com.domore.justdo.di.task
 import com.domore.justdo.ui.task.addTask.AddTaskFragment
 import com.domore.justdo.ui.task.currenttask.CurrentTaskFragment
 import com.domore.justdo.ui.stats.StatisticsFragment
-import com.domore.justdo.ui.task.tasklist.TaskListFragment
+import com.domore.justdo.ui.task.tasklist.TasksFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -11,7 +11,7 @@ import dagger.android.ContributesAndroidInjector
 abstract class TaskUiModule {
 
     @ContributesAndroidInjector
-    abstract fun bindTaskLIstFragment(): TaskListFragment
+    abstract fun bindTaskLIstFragment(): TasksFragment
 
     @ContributesAndroidInjector
     abstract fun bindAddTaskFragment(): AddTaskFragment
