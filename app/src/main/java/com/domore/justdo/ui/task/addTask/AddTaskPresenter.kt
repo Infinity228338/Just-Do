@@ -3,7 +3,10 @@ package com.domore.justdo.ui.task.addTask
 import com.domore.justdo.data.category.repository.CategoryRepository
 import com.domore.justdo.data.mode.repository.ModeRepository
 import com.domore.justdo.data.task.repository.TaskRepository
-import com.domore.justdo.data.vo.*
+import com.domore.justdo.data.vo.Category
+import com.domore.justdo.data.vo.ModeType
+import com.domore.justdo.data.vo.Task
+import com.domore.justdo.data.vo.TimeTypes
 import com.domore.justdo.getDateFormatted
 import com.domore.justdo.getTimeFormatted
 import com.domore.justdo.schedulers.Schedulers
@@ -48,6 +51,10 @@ class AddTaskPresenter @AssistedInject constructor(
             viewState.removeItem(pos)
         }
 
+        override fun notifyItemChanged(selectedItemPos: Int) {
+            viewState.notifyItemChanged(selectedItemPos)
+        }
+
         override fun getCount(): Int = tasks.size
 
         fun getSelected(): Task? {
@@ -68,11 +75,38 @@ class AddTaskPresenter @AssistedInject constructor(
 //        }
     }
 
-
     fun cardTaskClicked() {
-        cardTaskExpanded = !cardTaskExpanded
-        if (cardTaskExpanded && currentCategory == null) setCategory(-1L)
+        expandCard()
+    }
+
+    private fun expandCard() {
+        if (currentCategory == null) setCategory(-1L)
+        cardTaskExpanded = true
         viewState.expandOrCollapseCard(cardTaskExpanded)
+    }
+
+    private fun collapseCard() {
+        cardTaskExpanded = false
+        viewState.expandOrCollapseCard(cardTaskExpanded)
+    }
+
+    fun setCategory(categoryId: Long) {
+        if (categoryId == -1L) {
+            router.setResultListener("kek_lol") {
+                setCategory(it as Long)
+            }
+            router.navigateTo(JustDoScreensImpl.categoriesScreen())
+        } else {
+            currentTask?.categoryId = categoryId
+            categoryRepository
+                .getCategoryById(categoryId)
+                .subscribeOn(schedulers.background())
+                .observeOn(schedulers.background())
+                .subscribe { category ->
+                    currentCategory = category
+                    currentTask.iconResId = category.iconResId
+                }
+        }
     }
 
     fun modeSelectorClicked() {
@@ -83,34 +117,49 @@ class AddTaskPresenter @AssistedInject constructor(
             modeClicked(ModeType.INTERVAL)
     }
 
-    fun modeClicked(mode: ModeType) {
+    fun modeClicked(modeType: ModeType) {
         disposables.add(
             modeRepository
-                .getModeByName(mode.name)
+                .getModeByName(modeType.name)
                 .observeOn(schedulers.background())
                 .subscribeOn(schedulers.background())
-                .subscribe(::onModeLoaded)
+                .subscribe { mode -> currentTask.modeId = mode.id }
         )
 
         viewState.hideAllTimes()
         viewState.processModeClick(
-            mode,
-            if (mode == ModeType.TIMER) "00:00:00"
+            modeType,
+            if (modeType == ModeType.TIMER) "00:00:00"
             else Calendar.getInstance().getTimeFormatted()
         )
     }
 
-    fun addIconClicked(name: String) {
-        if (cardTaskExpanded && name.isNotBlank())
-            okClicked(name)
-        else {
-            cardTaskClicked()
-        }
+    fun addClicked(name: String) {
+        if (name.isNotBlank())
+            saveTask(name)
+        if (cardTaskExpanded) collapseCard()
+        else expandCard()
     }
 
-    private fun onModeLoaded(mode: Mode) {
-        currentTask.modeId = mode.id
+    private fun saveTask(name: String) {
+        currentTask.name = name
+        taskRepository
+            .saveTask(currentTask)
+            .observeOn(schedulers.main())
+            .subscribeOn(schedulers.background())
+            .subscribe(::onTaskSaved)
     }
+
+    private fun onTaskSaved(task: Task) {
+        taskListPresenter.tasks.let {
+            it.add(task)
+            viewState.addItemToList(it.lastIndex)
+        }
+        collapseCard()
+        currentTask = Task()
+        currentCategory = null
+    }
+
 
     fun dateClicked() {
         viewState.showDatePicker(Calendar.getInstance())
@@ -148,35 +197,6 @@ class AddTaskPresenter @AssistedInject constructor(
         viewState.showTimePicker(Calendar.getInstance(), TimeTypes.PRECISE_TIME)
     }
 
-    fun okClicked(name: String) {
-        currentTask.name = name
-        taskRepository
-            .saveTask(currentTask)
-            .observeOn(schedulers.main())
-            .subscribeOn(schedulers.background())
-            .subscribe(::onTaskSaved)
-    }
-
-    private fun onTaskSaved(task: Task) {
-        taskListPresenter.tasks.let {
-            it.add(task)
-            viewState.addItemToList(it.lastIndex)
-        }
-        cardTaskClicked()
-        currentTask = Task()
-        currentCategory = null
-    }
-
-    fun backPressed(): Boolean {
-        router.exit()
-        return true
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposables.dispose()
-    }
-
     fun setTime(time: Calendar, timeTypes: TimeTypes) {
         if (timeTypes == TimeTypes.INTERVAL_START)
             currentTask.timeStart = time.time
@@ -201,23 +221,14 @@ class AddTaskPresenter @AssistedInject constructor(
         }
     }
 
-    fun setCategory(categoryId: Long) {
-        if (categoryId == -1L) {
-            router.setResultListener("kek_lol") {
-                setCategory(it as Long)
-            }
-            router.navigateTo(JustDoScreensImpl.categoriesScreen())
-        } else {
-            currentTask?.categoryId = categoryId
-            categoryRepository
-                .getCategoryById(categoryId)
-                .subscribeOn(schedulers.background())
-                .observeOn(schedulers.background())
-                .subscribe { category ->
-                    currentCategory = category
-                    currentTask.iconResId = category.iconResId
-                }
-        }
+    fun backPressed(): Boolean {
+        router.exit()
+        return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.dispose()
     }
 }
 

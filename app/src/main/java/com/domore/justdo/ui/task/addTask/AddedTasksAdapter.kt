@@ -1,5 +1,6 @@
 package com.domore.justdo.ui.task.addTask
 
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,31 +40,30 @@ class AddedTasksAdapter(val presenter: AddedTasksListPresenter) :
     inner class ViewHolder(val binding: ItemTaskOnelineBinding) :
         RecyclerView.ViewHolder(binding.root),
         TaskItemView {
+
+        val editingViews = listOf(
+            binding.timeIcon,
+            binding.textModeTime,
+            binding.textInterval,
+            binding.textTimer,
+            binding.textPreciseTime,
+            binding.barrier,
+            binding.calendarIcon,
+            binding.textDate,
+        )
+
         override fun bind(task: Task) {
-            binding.taskName.text = task.name
+            val current = presenter.selectedItemPos == layoutPosition
+            val visibility = getVisibility(current)
+            hideEditable()
+            binding.taskName.setText(task.name)
             binding.editIcon.setOnClickListener {
-                binding.apply {
-                    timeIcon.visibility = View.VISIBLE
-                    textModeTime.visibility = View.VISIBLE
-                    textInterval.visibility = View.VISIBLE
-                    textTimer.visibility = View.VISIBLE
-                    textPreciseTime.visibility = View.VISIBLE
-                    barrier.visibility = View.VISIBLE
-                    calendarIcon.visibility = View.VISIBLE
-                    textDate.visibility = View.VISIBLE
-                    textDateSelected.visibility = View.VISIBLE
-                }
+                showEditable()
             }
             binding.deleteIcon.setOnClickListener {
                 presenter.deleteIconClick(pos)
             }
             task.iconResId?.let { binding.taskIcon.setImageResource(it) }
-            val current = presenter.selectedItemPos == layoutPosition
-            val visibility = if (current) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
             val back = AppCompatResources.getDrawable(
                 itemView.context, if (current)
                     R.drawable.background_rounded_white
@@ -73,12 +73,40 @@ class AddedTasksAdapter(val presenter: AddedTasksListPresenter) :
             binding.editIcon.visibility = visibility
             binding.deleteIcon.visibility = visibility
             itemView.setOnClickListener {
-                notifyItemChanged(presenter.selectedItemPos)
+                presenter.notifyItemChanged(presenter.selectedItemPos)
                 presenter.selectedItemPos = layoutPosition
-                notifyItemChanged(presenter.selectedItemPos)
+                presenter.notifyItemChanged(presenter.selectedItemPos)
+            }
+            binding.taskName.setOnClickListener {
+                presenter.notifyItemChanged(presenter.selectedItemPos)
+                presenter.selectedItemPos = layoutPosition
+                presenter.notifyItemChanged(presenter.selectedItemPos)
             }
         }
 
+        private fun showEditable() {
+            editingViews.forEach {
+                it.visibility = View.VISIBLE
+            }
+            binding.taskName.inputType = InputType.TYPE_CLASS_TEXT
+        }
+
+        private fun hideEditable() {
+            editingViews.forEach {
+                it.visibility = View.GONE
+            }
+            binding.taskName.inputType = InputType.TYPE_NULL
+
+        }
+
         override var pos: Int = -1
+    }
+
+    private fun getVisibility(current: Boolean): Int {
+        return if (current) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
     }
 }

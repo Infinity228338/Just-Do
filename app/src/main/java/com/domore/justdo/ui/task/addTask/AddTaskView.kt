@@ -34,6 +34,7 @@ interface AddTaskView : MvpView {
 
     fun addItemToList(position: Int)
     fun removeItem(pos: Int)
+    fun notifyItemChanged(selectedItemPos: Int)
 
     fun showOrHideModes(modesExpanded: Boolean)
 }

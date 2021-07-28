@@ -103,7 +103,13 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
                 setOnFocusChangeListener { _, hasFocus ->
                     if (!hasFocus)
                         hideKeyboard()
+                    else
+                        presenter.cardTaskClicked()
 
+
+                }
+                setOnClickListener {
+                    presenter.cardTaskClicked()
                 }
             }
 
@@ -133,13 +139,10 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
                 presenter.backPressed()
             }
 
-            addIcon.setOnClickListener {
-                presenter.addIconClicked(editTaskName.text.toString())
+            listOf(textOk, addIcon).forEach {
+                it.setOnClickListener { presenter.addClicked(editTaskName.text.toString()) }
             }
 
-            textOk.setOnClickListener {
-                presenter.okClicked(editTaskName.text.toString())
-            }
             listOf(timeIcon, textModeTime).forEach {
                 it.setOnClickListener { presenter.modeSelectorClicked() }
             }
@@ -239,6 +242,10 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
 
     override fun removeItem(pos: Int) {
         adapter?.notifyDataSetChanged()
+    }
+
+    override fun notifyItemChanged(selectedItemPos: Int) {
+        adapter?.notifyItemChanged(selectedItemPos)
     }
 
     override fun showDatePicker(date: Calendar) {
