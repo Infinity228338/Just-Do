@@ -1,11 +1,9 @@
 package com.domore.justdo.ui.task.addTask
 
+import com.domore.justdo.data.category.repository.CategoryRepository
 import com.domore.justdo.data.mode.repository.ModeRepository
 import com.domore.justdo.data.task.repository.TaskRepository
-import com.domore.justdo.data.vo.Mode
-import com.domore.justdo.data.vo.ModeType
-import com.domore.justdo.data.vo.Task
-import com.domore.justdo.data.vo.TimeTypes
+import com.domore.justdo.data.vo.*
 import com.domore.justdo.schedulers.Schedulers
 import com.domore.justdo.ui.task.listbase.TaskItemView
 import com.domore.justdo.ui.task.listbase.TaskListPresenter
@@ -18,6 +16,7 @@ import java.util.*
 
 class AddTaskPresenter @AssistedInject constructor(
     private val taskRepository: TaskRepository,
+    private val categoryRepository: CategoryRepository,
     private val modeRepository: ModeRepository,
     private val schedulers: Schedulers,
     private val router: Router
@@ -27,16 +26,34 @@ class AddTaskPresenter @AssistedInject constructor(
     private var modesExpanded = false
     private var cardTaskExpanded = false
     private lateinit var currentTask: Task
+    private lateinit var currentCategory: Category
 
-    class TaskListPresenterImpl : TaskListPresenter {
+    inner class TaskListPresenterImpl : TaskListPresenter {
         val tasks = mutableListOf<Task>()
+        override var selectedItemPos = -1
+
         override var itemClickListener: ((TaskItemView) -> Unit)? = null
 
         override fun bindView(view: TaskItemView) {
             view.bind(tasks[view.pos])
         }
 
+        override fun editIconClick(pos: Int) {
+
+        }
+
+        override fun deleteIconClick(pos: Int) {
+            tasks.removeAt(pos)
+            viewState.removeItem(pos)
+        }
+
         override fun getCount(): Int = tasks.size
+
+        fun getSelected(): Task? {
+            return if (selectedItemPos != -1) {
+                tasks[selectedItemPos]
+            } else null
+        }
     }
 
     val taskListPresenter = TaskListPresenterImpl()
@@ -45,10 +62,11 @@ class AddTaskPresenter @AssistedInject constructor(
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
-        taskListPresenter.itemClickListener = {
-
-        }
+//        taskListPresenter.itemClickListener = {
+//            it.itemClicked(taskListPresenter.tasks[it.pos])
+//        }
     }
+
 
     fun cardTaskClicked() {
         cardTaskExpanded = !cardTaskExpanded
@@ -128,6 +146,7 @@ class AddTaskPresenter @AssistedInject constructor(
             .subscribeOn(schedulers.background())
             .subscribe(::onTaskSaved)
         currentTask = Task()
+        currentTask.iconResId = currentCategory.iconResId
     }
 
     private fun onTaskSaved(task: Task) {
@@ -175,8 +194,15 @@ class AddTaskPresenter @AssistedInject constructor(
     fun setCategory(categoryId: Long) {
         currentTask = Task()
         currentTask.categoryId = categoryId
+        categoryRepository
+            .getCategoryById(categoryId)
+            .subscribeOn(schedulers.background())
+            .observeOn(schedulers.background())
+            .subscribe { category ->
+                currentCategory = category
+                currentTask.iconResId = category.iconResId
+            }
     }
-
 }
 
 fun Calendar.getTimeFormatted(): String {

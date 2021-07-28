@@ -27,6 +27,7 @@ interface AddTaskView : MvpView {
     fun expandOrCollapseCard(cardTaskNameExpanded: Boolean)
 
     fun addItemToList(position: Int)
-    fun showOrHideModes(modesExpanded: Boolean)
+    fun removeItem(pos: Int)
 
+    fun showOrHideModes(modesExpanded: Boolean)
 }

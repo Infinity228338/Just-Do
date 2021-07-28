@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/task_item_size_oneline"
-    android:layout_margin="10dp">
+    android:background="@drawable/background_rounded_ultragrey">
 
     <ImageView
         android:id="@+id/task_icon"
@@ -46,6 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
         android:src="@drawable/ic_icon_edit"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/delete_icon"
         app:layout_constraintTop_toTopOf="parent" />
@@ -56,6 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
         android:src="@drawable/ic_icon_delete"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

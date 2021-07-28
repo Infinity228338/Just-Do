@@ -21,6 +21,7 @@ data class Task(
     var name: String?,
     var modeId: Long?,
     var categoryId: Long?,
+    var iconResId: Int?,
     var date: Date?,
     var timeStart: Date?,
     var timeEnd: Date?,
@@ -28,6 +29,7 @@ data class Task(
 ) {
     constructor() : this(
         0,
+        null,
         null,
         null,
         null,

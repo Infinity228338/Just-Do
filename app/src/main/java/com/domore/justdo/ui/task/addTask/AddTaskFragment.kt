@@ -100,13 +100,11 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
             }
             editTaskName.apply {
                 setOnFocusChangeListener { _, hasFocus ->
-                    if (hasFocus)
-                        presenter.cardTaskClicked()
-                    else {
+                    if (!hasFocus)
                         hideKeyboard()
-                    }
                 }
             }
+
             textInterval.setOnClickListener {
                 presenter.modeClicked(ModeType.INTERVAL)
             }
@@ -154,9 +152,6 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
         val visibility = getVisibility(shown)
         val addIconRes = if (shown) R.drawable.ic_icon_check else R.drawable.ic_add_inactive
         val itemsIconRes = if (shown) R.drawable.ic_icon_name else R.drawable.ic_icon_list
-        val text =
-            requireContext()
-                .getString(if (shown) R.string.choose_mode else R.string.mode_and_time)
         viewBinding?.apply {
             TransitionManager.beginDelayedTransition(addTaskView)
             cardTask.setCardBackgroundColor(color)
@@ -233,6 +228,11 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
 
     override fun addItemToList(position: Int) {
         adapter?.notifyItemInserted(position)
+        viewBinding?.editTaskName?.setText("")
+    }
+
+    override fun removeItem(pos: Int) {
+        adapter?.notifyDataSetChanged()
     }
 
     override fun showDatePicker(date: Calendar) {
