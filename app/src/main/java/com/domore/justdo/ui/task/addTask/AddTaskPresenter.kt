@@ -7,8 +7,6 @@ import com.domore.justdo.data.vo.Category
 import com.domore.justdo.data.vo.ModeType
 import com.domore.justdo.data.vo.Task
 import com.domore.justdo.data.vo.TimeTypes
-import com.domore.justdo.getDateFormatted
-import com.domore.justdo.getTimeFormatted
 import com.domore.justdo.schedulers.Schedulers
 import com.domore.justdo.ui.JustDoScreensImpl
 import com.domore.justdo.ui.task.TaskItemView
@@ -75,11 +73,7 @@ class AddTaskPresenter @AssistedInject constructor(
 //        }
     }
 
-    fun cardTaskClicked() {
-        expandCard()
-    }
-
-    private fun expandCard() {
+    fun expandCard() {
         if (currentCategory == null) setCategory(-1L)
         cardTaskExpanded = true
         viewState.expandOrCollapseCard(cardTaskExpanded)
@@ -97,7 +91,7 @@ class AddTaskPresenter @AssistedInject constructor(
             }
             router.navigateTo(JustDoScreensImpl.categoriesScreen())
         } else {
-            currentTask?.categoryId = categoryId
+            currentTask.categoryId = categoryId
             categoryRepository
                 .getCategoryById(categoryId)
                 .subscribeOn(schedulers.background())
@@ -127,11 +121,9 @@ class AddTaskPresenter @AssistedInject constructor(
         )
 
         viewState.hideAllTimes()
-        viewState.processModeClick(
-            modeType,
-            if (modeType == ModeType.TIMER) "00:00:00"
-            else Calendar.getInstance().getTimeFormatted()
-        )
+        viewState.processModeClick(modeType)
+        viewState.drawTask(currentTask)
+
     }
 
     fun addClicked(name: String) {
@@ -160,41 +152,11 @@ class AddTaskPresenter @AssistedInject constructor(
         currentCategory = null
     }
 
-
-    fun dateClicked() {
-        viewState.showDatePicker(Calendar.getInstance())
-    }
-
-    fun setDate(dateAndTime: Calendar) {
-        currentTask.date = dateAndTime.time
-        viewState.setDate(dateAndTime.getDateFormatted())
-    }
-
-    fun timeStartClicked() {
-        setTime(Calendar.getInstance(), TimeTypes.INTERVAL_START)
-        viewState.showTimePicker(Calendar.getInstance(), TimeTypes.INTERVAL_START)
-    }
-
-    fun timeEndClicked() {
-        setTime(Calendar.getInstance(), TimeTypes.INTERVAL_END)
-        viewState.showTimePicker(Calendar.getInstance(), TimeTypes.INTERVAL_END)
-    }
-
-    fun timeDurationClicked() {
-        viewState.showTimerPicker()
-    }
-
-    fun timerSelected(hours: Int, minutes: Int, seconds: Int) {
-        "$hours:$minutes:$seconds".let {
-            currentTask.period = it
-            setTimeFormatted(it, TimeTypes.TIMER)
-        }
-
-    }
-
-    fun timePreciseClicked() {
-        setTime(Calendar.getInstance(), TimeTypes.PRECISE_TIME)
-        viewState.showTimePicker(Calendar.getInstance(), TimeTypes.PRECISE_TIME)
+    fun timeClicked(timeTypes: TimeTypes) {
+        if (timeTypes == TimeTypes.TIMER)
+            viewState.showTimerPicker()
+        else
+            viewState.showTimePicker(Calendar.getInstance(), timeTypes)
     }
 
     fun setTime(time: Calendar, timeTypes: TimeTypes) {
@@ -207,17 +169,22 @@ class AddTaskPresenter @AssistedInject constructor(
                 currentTask.timeStart = it
                 currentTask.timeEnd = it
             }
-        setTimeFormatted(time.getTimeFormatted(), timeTypes)
+        viewState.drawTask(currentTask)
     }
 
-    private fun setTimeFormatted(timeFormatted: String, timeTypes: TimeTypes) {
-        timeFormatted.let {
-            when (timeTypes) {
-                TimeTypes.INTERVAL_START -> viewState.setTimeStartText(it)
-                TimeTypes.INTERVAL_END -> viewState.setTimeEndText(it)
-                TimeTypes.TIMER -> viewState.setTimerText(it)
-                TimeTypes.PRECISE_TIME -> viewState.setPreciseText(it)
-            }
+    fun dateClicked() {
+        viewState.showDatePicker(Calendar.getInstance())
+    }
+
+    fun setDate(dateAndTime: Calendar) {
+        currentTask.date = dateAndTime.time
+        viewState.drawTask(currentTask)
+    }
+
+    fun timerSelected(hours: Int, minutes: Int, seconds: Int) {
+        "$hours:$minutes:$seconds".let {
+            currentTask.timerTime = it
+            viewState.drawTask(currentTask)
         }
     }
 

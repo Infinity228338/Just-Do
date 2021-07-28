@@ -25,7 +25,7 @@ data class Task(
     var date: Date?,
     var timeStart: Date?,
     var timeEnd: Date?,
-    var period: String?
+    var timerTime: String?
 ) {
     constructor() : this(
         0,

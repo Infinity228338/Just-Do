@@ -43,10 +43,10 @@ class AddedTasksAdapter(val presenter: AddedTasksListPresenter) :
 
         val editingViews = listOf(
             binding.timeIcon,
-            binding.textModeTime,
-            binding.textInterval,
-            binding.textTimer,
-            binding.textPreciseTime,
+            binding.textModeSelector,
+            binding.textModeInterval,
+            binding.textModeTimer,
+            binding.textModePrecise,
             binding.barrier,
             binding.calendarIcon,
             binding.textDate,

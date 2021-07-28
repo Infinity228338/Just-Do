@@ -1,6 +1,7 @@
 package com.domore.justdo.ui.task.addTask
 
 import com.domore.justdo.data.vo.ModeType
+import com.domore.justdo.data.vo.Task
 import com.domore.justdo.data.vo.TimeTypes
 import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
@@ -23,18 +24,14 @@ interface AddTaskView : MvpView {
     @StateStrategyType(SkipStrategy::class)
     fun showTimerPicker()
 
-    fun setTimeStartText(formattedTime: String)
-    fun setTimeEndText(formattedTime: String)
-    fun setTimerText(formattedTime: String)
-    fun setPreciseText(formattedTime: String)
-    fun setDate(dateFormatted: String)
+    fun drawTask(currentTask: Task)
 
-    fun processModeClick(modeType: ModeType, formatted: String)
     fun expandOrCollapseCard(cardTaskNameExpanded: Boolean)
 
     fun addItemToList(position: Int)
     fun removeItem(pos: Int)
     fun notifyItemChanged(selectedItemPos: Int)
 
+    fun processModeClick(modeType: ModeType)
     fun showOrHideModes(modesExpanded: Boolean)
 }
