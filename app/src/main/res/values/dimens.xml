@@ -8,13 +8,22 @@
     <dimen name="category_icon_size">44dp</dimen>
     <dimen name="task_item_size">72dp</dimen>
 
+    <dimen name="icons_margin">3dp</dimen>
+    <dimen name="button_margin_top">5dp</dimen>
+    <dimen name="dialog_header_margin">10dp</dimen>
+    <dimen name="text_ad_category_margin">15dp</dimen>
+    <dimen name="button_margin_end">15dp</dimen>
+
+    <dimen name="icons_add_cat_size">30dp</dimen>
     <dimen name="category_icon_size_big">55dp</dimen>
     <dimen name="task_item_size_oneline">56dp</dimen>
     <dimen name="bottom_nav_height">70dp</dimen>
-    <dimen name="category_text_size">12sp</dimen>
-    <dimen name="icons_add_cat_size">30dp</dimen>
-    <dimen name="icons_margin">5dp</dimen>
-    <dimen name="text_ad_category_margin">15dp</dimen>
-    <dimen name="button_margin_top">5dp</dimen>
-    <dimen name="button_margin_end">15dp</dimen>
+
+    <dimen name="zero">0dp</dimen>
+
+    <dimen name="category_text_size">16sp</dimen>
+    <dimen name="default_text_size">14sp</dimen>
+    <dimen name="dialog_header_text">16sp</dimen>
+
+
 </resources>

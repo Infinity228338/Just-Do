@@ -1,11 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
     <style name="CategoryText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/category_text_size</item>
+        <item name="android:textSize">@dimen/default_text_size</item>
         <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="CategoryText.Grid">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="DialogHeader">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/dialog_header_margin</item>
+        <item name="android:textSize">@dimen/dialog_header_text</item>
+        <item name="android:text">@string/add_category</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="CategoryEditText">
+        <item name="android:layout_width">@dimen/zero</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:lines">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/dialog_header_margin</item>
+        <item name="android:layout_marginEnd">@dimen/dialog_header_margin</item>
+        <item name="android:hint">@string/enter_category_name</item>
+        <item name="android:textColorHint">@color/main_green</item>
+        <item name="android:textSize">@dimen/default_text_size</item>
     </style>
 
     <style name="GreenText">
@@ -15,8 +43,6 @@
     </style>
 
     <style name="GreenText.MarginStart" parent="GreenText">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">@dimen/text_ad_category_margin</item>
         <item name="android:textColor">@color/main_green</item>
     </style>

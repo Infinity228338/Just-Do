@@ -17,9 +17,10 @@
 
     <TextView
         android:id="@+id/category_name"
-        style="@style/CategoryText"
+        style="@style/CategoryText.Grid"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:ellipsize="end"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="@tools:sample/cities" />
 

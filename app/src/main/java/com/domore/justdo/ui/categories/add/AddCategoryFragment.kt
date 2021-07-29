@@ -1,6 +1,8 @@
 package com.domore.justdo.ui.categories.add
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

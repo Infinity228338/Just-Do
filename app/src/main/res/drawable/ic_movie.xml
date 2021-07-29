@@ -3,60 +3,60 @@
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
-  <path
-      android:pathData="M18,4H6C4.8954,4 4,4.8954 4,6V18C4,19.1046 4.8954,20 6,20H18C19.1046,20 20,19.1046 20,18V6C20,4.8954 19.1046,4 18,4Z"
-      android:strokeLineJoin="round"
-      android:strokeWidth="1.5"
-      android:fillColor="#00000000"
-      android:strokeColor="#888888"
-      android:strokeLineCap="round"/>
-  <path
-      android:pathData="M8,4V20"
-      android:strokeLineJoin="round"
-      android:strokeWidth="1.5"
-      android:fillColor="#00000000"
-      android:strokeColor="#888888"
-      android:strokeLineCap="round"/>
-  <path
-      android:pathData="M16,4V20"
-      android:strokeLineJoin="round"
-      android:strokeWidth="1.5"
-      android:fillColor="#00000000"
-      android:strokeColor="#888888"
-      android:strokeLineCap="round"/>
-  <path
-      android:pathData="M4,8H8"
-      android:strokeLineJoin="round"
-      android:strokeWidth="1.5"
-      android:fillColor="#00000000"
-      android:strokeColor="#888888"
-      android:strokeLineCap="round"/>
-  <path
-      android:pathData="M4,16H8"
-      android:strokeLineJoin="round"
-      android:strokeWidth="1.5"
-      android:fillColor="#00000000"
-      android:strokeColor="#888888"
-      android:strokeLineCap="round"/>
-  <path
-      android:pathData="M4,12H20"
-      android:strokeLineJoin="round"
-      android:strokeWidth="1.5"
-      android:fillColor="#00000000"
-      android:strokeColor="#888888"
-      android:strokeLineCap="round"/>
-  <path
-      android:pathData="M16,8H20"
-      android:strokeLineJoin="round"
-      android:strokeWidth="1.5"
-      android:fillColor="#00000000"
-      android:strokeColor="#888888"
-      android:strokeLineCap="round"/>
-  <path
-      android:pathData="M16,16H20"
-      android:strokeLineJoin="round"
-      android:strokeWidth="1.5"
-      android:fillColor="#00000000"
-      android:strokeColor="#888888"
-      android:strokeLineCap="round"/>
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M18,4H6C4.8954,4 4,4.8954 4,6V18C4,19.1046 4.8954,20 6,20H18C19.1046,20 20,19.1046 20,18V6C20,4.8954 19.1046,4 18,4Z"
+        android:strokeWidth="1.5"
+        android:strokeColor="#888888"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M8,4V20"
+        android:strokeWidth="1.5"
+        android:strokeColor="#888888"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M16,4V20"
+        android:strokeWidth="1.5"
+        android:strokeColor="#888888"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M4,8H8"
+        android:strokeWidth="1.5"
+        android:strokeColor="#888888"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M4,16H8"
+        android:strokeWidth="1.5"
+        android:strokeColor="#888888"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M4,12H20"
+        android:strokeWidth="1.5"
+        android:strokeColor="#888888"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M16,8H20"
+        android:strokeWidth="1.5"
+        android:strokeColor="#888888"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M16,16H20"
+        android:strokeWidth="1.5"
+        android:strokeColor="#888888"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
 </vector>
