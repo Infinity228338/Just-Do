@@ -17,13 +17,12 @@ class TimePickerDialogFragment : DialogFragment() {
         fun onTimeSubmit(hours: Int, minutes: Int, seconds: Int)
     }
 
+    internal fun setOnTimerClickListener(listener: OnTimeSelectedListener) {
+        callback = listener
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        callback = try {
-            targetFragment as OnTimeSelectedListener?
-        } catch (e: Exception) {
-            throw ClassCastException("Calling Fragment must implement OnAddFriendListener")
-        }
     }
 
     override fun onCreateView(
@@ -51,6 +50,12 @@ class TimePickerDialogFragment : DialogFragment() {
                 this.dismiss()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        callback = null
+        super.onDestroyView()
+
     }
 
     companion object {

@@ -10,6 +10,7 @@ import com.domore.justdo.data.vo.TimeTypes
 import com.domore.justdo.schedulers.Schedulers
 import com.domore.justdo.ui.JustDoScreensImpl
 import com.domore.justdo.ui.task.TaskItemView
+import com.domore.justdo.ui.task.addTask.timepicker.TimePickerDialogFragment
 import com.github.terrakok.cicerone.Router
 import dagger.assisted.AssistedInject
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -53,13 +54,65 @@ class AddTaskPresenter @AssistedInject constructor(
             viewState.notifyItemChanged(selectedItemPos)
         }
 
+        override fun timeClicked(timeType: TimeTypes) {
+            if (timeType == TimeTypes.TIMER)
+                viewState.showTimerPicker(object : TimePickerDialogFragment.OnTimeSelectedListener {
+                    override fun onTimeSubmit(hours: Int, minutes: Int, seconds: Int) {
+                        timerSelected(hours, minutes, seconds)
+                    }
+                })
+            else {
+                val calendar = Calendar.getInstance()
+                viewState.showTimePicker(calendar, timeType) { _, hourOfDay, minute ->
+                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                    calendar.set(Calendar.MINUTE, minute)
+                    setTimeListItem(calendar, timeType)
+                }
+            }
+        }
+
+        override fun dateClicked() {
+            val calendar = Calendar.getInstance()
+            viewState.showDatePicker(
+                calendar
+            ) { _, year, month, dayOfMonth ->
+                calendar.set(Calendar.YEAR, year)
+                calendar.set(Calendar.MONTH, month)
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                setDate(calendar)
+            }
+        }
+
+        private fun setDate(dateAndTime: Calendar) {
+            currentTask.date = dateAndTime.time
+            viewState.drawTask(currentTask)
+        }
+
+        private fun setTimeListItem(time: Calendar, timeTypes: TimeTypes) {
+            if (timeTypes == TimeTypes.INTERVAL_START)
+                selectedTask?.timeStart = time.time
+            if (timeTypes == TimeTypes.INTERVAL_END)
+                selectedTask?.timeEnd = time.time
+            if (timeTypes == TimeTypes.PRECISE_TIME)
+                time.time.let {
+                    selectedTask?.timeStart = it
+                    selectedTask?.timeEnd = it
+                }
+            viewState.drawTask(currentTask)
+        }
+
+        override fun modifyClicked(name: String) {
+            selectedTask?.name = name
+            viewState.notifyItemChanged(selectedItemPos)
+        }
+
         override fun getCount(): Int = tasks.size
 
-        fun getSelected(): Task? {
-            return if (selectedItemPos != -1) {
-                tasks[selectedItemPos]
-            } else null
-        }
+        private val selectedTask: Task?
+            get() =
+                if (selectedItemPos != -1)
+                    tasks[selectedItemPos]
+                else null
     }
 
     val taskListPresenter = TaskListPresenterImpl()
@@ -68,9 +121,9 @@ class AddTaskPresenter @AssistedInject constructor(
         super.onFirstViewAttach()
         viewState.init()
         currentTask = Task()
-//        taskListPresenter.itemClickListener = {
-//            it.itemClicked(taskListPresenter.tasks[it.pos])
-//        }
+        taskListPresenter.itemClickListener = {
+            it.itemClicked(taskListPresenter.tasks[it.pos])
+        }
     }
 
     fun expandCard() {
@@ -154,12 +207,22 @@ class AddTaskPresenter @AssistedInject constructor(
 
     fun timeClicked(timeTypes: TimeTypes) {
         if (timeTypes == TimeTypes.TIMER)
-            viewState.showTimerPicker()
-        else
-            viewState.showTimePicker(Calendar.getInstance(), timeTypes)
+            viewState.showTimerPicker(object : TimePickerDialogFragment.OnTimeSelectedListener {
+                override fun onTimeSubmit(hours: Int, minutes: Int, seconds: Int) {
+                    timerSelected(hours, minutes, seconds)
+                }
+            })
+        else {
+            val calendar = Calendar.getInstance()
+            viewState.showTimePicker(calendar, timeTypes) { _, hourOfDay, minute ->
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                calendar.set(Calendar.MINUTE, minute)
+                setTime(calendar, timeTypes)
+            }
+        }
     }
 
-    fun setTime(time: Calendar, timeTypes: TimeTypes) {
+    private fun setTime(time: Calendar, timeTypes: TimeTypes) {
         if (timeTypes == TimeTypes.INTERVAL_START)
             currentTask.timeStart = time.time
         if (timeTypes == TimeTypes.INTERVAL_END)
@@ -173,13 +236,22 @@ class AddTaskPresenter @AssistedInject constructor(
     }
 
     fun dateClicked() {
-        viewState.showDatePicker(Calendar.getInstance())
+        val calendar = Calendar.getInstance()
+        viewState.showDatePicker(
+            calendar
+        ) { _, year, month, dayOfMonth ->
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            setDate(calendar)
+        }
     }
 
-    fun setDate(dateAndTime: Calendar) {
+    private fun setDate(dateAndTime: Calendar) {
         currentTask.date = dateAndTime.time
         viewState.drawTask(currentTask)
     }
+
 
     fun timerSelected(hours: Int, minutes: Int, seconds: Int) {
         "$hours:$minutes:$seconds".let {

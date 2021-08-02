@@ -32,6 +32,10 @@ class TasksAdapter(val presenter: TaskListPresenter) :
             task.name?.let { binding.taskName.text = it }
         }
 
+        override fun itemClicked(task: Task) {
+
+        }
+
         override var pos: Int = -1
 
     }

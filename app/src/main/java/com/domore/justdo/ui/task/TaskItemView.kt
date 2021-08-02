@@ -5,4 +5,5 @@ import com.domore.justdo.ui.base.ItemView
 
 interface TaskItemView : ItemView {
     fun bind(task: Task)
+    fun itemClicked(task: Task)
 }

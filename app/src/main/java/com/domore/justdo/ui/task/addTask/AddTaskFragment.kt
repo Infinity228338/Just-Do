@@ -24,9 +24,7 @@ import javax.inject.Inject
 
 const val ARG_CATEGORY_ID = "category_id"
 
-class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, BackButtonListener,
-    TimePickerDialogFragment.OnTimeSelectedListener {
-
+class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, BackButtonListener {
 
     @Inject
     lateinit var addTaskPresenterFactory: AddTaskPresenterFactory
@@ -108,8 +106,6 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
                         hideKeyboard()
                     else
                         presenter.expandCard()
-
-
                 }
                 setOnClickListener {
                     presenter.expandCard()
@@ -164,8 +160,10 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
                 if (cardTaskNameExpanded) R.color.white else R.color.ultra_light_grey
             )
         val visibility = getVisibility(cardTaskNameExpanded)
-        val addIconRes = if (cardTaskNameExpanded) R.drawable.ic_icon_check else R.drawable.ic_add_inactive
-        val itemsIconRes = if (cardTaskNameExpanded) R.drawable.ic_icon_name else R.drawable.ic_icon_list
+        val addIconRes =
+            if (cardTaskNameExpanded) R.drawable.ic_icon_check else R.drawable.ic_add_inactive
+        val itemsIconRes =
+            if (cardTaskNameExpanded) R.drawable.ic_icon_name else R.drawable.ic_icon_list
         viewBinding?.apply {
             TransitionManager.beginDelayedTransition(addTaskView)
             cardTask.setCardBackgroundColor(color)
@@ -259,46 +257,40 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
         adapter?.notifyItemChanged(selectedItemPos)
     }
 
-    override fun showDatePicker(date: Calendar) {
+    override fun showDatePicker(date: Calendar, listener: DatePickerDialog.OnDateSetListener) {
         DatePickerDialog(
             requireContext(),
-            { _, year, month, dayOfMonth ->
-                date.set(Calendar.YEAR, year)
-                date.set(Calendar.MONTH, month)
-                date.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                presenter.setDate(date)
-            },
+            listener,
             date.get(Calendar.YEAR),
             date.get(Calendar.MONTH),
             date.get(Calendar.DAY_OF_MONTH)
         ).show()
     }
 
-    override fun showTimePicker(time: Calendar, timeTypes: TimeTypes) {
+
+
+    override fun showTimePicker(
+        time: Calendar,
+        timeTypes: TimeTypes,
+        listener: TimePickerDialog.OnTimeSetListener
+    ) {
         val timePickerDialog = TimePickerDialog(
             requireContext(),
-            { _, hourOfDay, minute ->
-                time.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                time.set(Calendar.MINUTE, minute)
-                presenter.setTime(time, timeTypes)
-            },
+            listener,
             time[Calendar.HOUR_OF_DAY],
             time[Calendar.MINUTE],
-            false
+            true
         )
         timePickerDialog.show()
     }
 
-    override fun showTimerPicker() {
+
+    override fun showTimerPicker(listener: TimePickerDialogFragment.OnTimeSelectedListener) {
         val timePickerDialogFragment: TimePickerDialogFragment =
             TimePickerDialogFragment.newInstance()
         timePickerDialogFragment.isCancelable = true
-        timePickerDialogFragment.setTargetFragment(this, 0)
+        timePickerDialogFragment.setOnTimerClickListener(listener)
         timePickerDialogFragment.show(parentFragmentManager, "fragment_time")
-    }
-
-    override fun onTimeSubmit(hours: Int, minutes: Int, seconds: Int) {
-        presenter.timerSelected(hours, minutes, seconds)
     }
 
     override fun backPressed(): Boolean = presenter.backPressed()
