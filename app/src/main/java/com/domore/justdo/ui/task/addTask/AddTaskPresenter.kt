@@ -36,18 +36,17 @@ class AddTaskPresenter @AssistedInject constructor(
         override var selectedItemPos = -1
 
         override var itemClickListener: ((TaskItemView) -> Unit)? = null
+        override var editClickListener: ((TaskItemView) -> Unit)? = null
+        override var editDoneClickListener: ((TaskItemView) -> Unit)? = null
 
         override fun bindView(view: TaskItemView) {
             view.bind(tasks[view.pos])
         }
 
-        override fun editIconClick(pos: Int) {
-            currentTask = tasks[pos]
-        }
-
         override fun deleteIconClick(pos: Int) {
             tasks.removeAt(pos)
             viewState.removeItem(pos)
+            viewState.changeRange(pos, tasks.size);
         }
 
         override fun notifyItemChanged(selectedItemPos: Int) {
@@ -82,6 +81,7 @@ class AddTaskPresenter @AssistedInject constructor(
                 setDate(calendar)
             }
         }
+
 
         private fun setDate(dateAndTime: Calendar) {
             currentTask.date = dateAndTime.time
@@ -121,8 +121,10 @@ class AddTaskPresenter @AssistedInject constructor(
         super.onFirstViewAttach()
         viewState.init()
         currentTask = Task()
-        taskListPresenter.itemClickListener = {
-            it.itemClicked(taskListPresenter.tasks[it.pos])
+        taskListPresenter.apply {
+            itemClickListener = { it.itemClicked(taskListPresenter.tasks[it.pos]) }
+            editClickListener = { it.editClicked() }
+            editDoneClickListener = { it.editDoneClicked() }
         }
     }
 

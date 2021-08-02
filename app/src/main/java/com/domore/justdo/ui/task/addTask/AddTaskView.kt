@@ -41,4 +41,5 @@ interface AddTaskView : MvpView {
 
     fun processModeClick(modeType: ModeType)
     fun showOrHideModes(modesExpanded: Boolean)
+    fun changeRange(pos: Int, size: Int)
 }

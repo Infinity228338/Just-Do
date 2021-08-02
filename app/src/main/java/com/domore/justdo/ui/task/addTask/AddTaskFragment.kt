@@ -250,11 +250,15 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
     }
 
     override fun removeItem(pos: Int) {
-        adapter?.notifyDataSetChanged()
+        adapter?.notifyItemRemoved(pos)
     }
 
     override fun notifyItemChanged(selectedItemPos: Int) {
         adapter?.notifyItemChanged(selectedItemPos)
+    }
+
+    override fun changeRange(pos: Int, size: Int) {
+        adapter?.notifyItemRangeChanged(pos, size)
     }
 
     override fun showDatePicker(date: Calendar, listener: DatePickerDialog.OnDateSetListener) {
@@ -266,7 +270,6 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
             date.get(Calendar.DAY_OF_MONTH)
         ).show()
     }
-
 
 
     override fun showTimePicker(

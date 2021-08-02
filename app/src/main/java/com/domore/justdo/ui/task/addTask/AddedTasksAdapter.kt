@@ -28,16 +28,19 @@ class AddedTasksAdapter(val presenter: AddedTasksListPresenter) :
             itemView.setOnClickListener {
                 presenter.itemClickListener?.invoke(this)
             }
+            binding.editIcon.setOnClickListener {
+                presenter.editClickListener?.invoke(this)
+            }
+            binding.editDoneIcon.setOnClickListener {
+                presenter.editDoneClickListener?.invoke(this)
+            }
             binding.apply {
                 taskName.setOnClickListener {
                     presenter.notifyItemChanged(presenter.selectedItemPos)
                     presenter.selectedItemPos = layoutPosition
                     presenter.notifyItemChanged(presenter.selectedItemPos)
                 }
-                editIcon.setOnClickListener {
-//                    expandEditCard()
-                    val int = 1
-                }
+
                 deleteIcon.setOnClickListener {
                     presenter.deleteIconClick(pos)
                 }
@@ -62,13 +65,13 @@ class AddedTasksAdapter(val presenter: AddedTasksListPresenter) :
                     }
                 }
 
-                listOf(editDoneIcon).forEach {
-                    it.setOnClickListener {
-                        presenter.modifyClicked(taskName.text.toString())
-//                        collapseEditCard()
-
-                    }
-                }
+//                listOf(editDoneIcon).forEach {
+//                    it.setOnClickListener {
+//                        presenter.modifyClicked(taskName.text.toString())
+////                        collapseEditCard()
+//
+//                    }
+//                }
 
                 listOf(timeIcon, textModeSelector).forEach {
                     it.setOnClickListener {
@@ -156,6 +159,14 @@ class AddedTasksAdapter(val presenter: AddedTasksListPresenter) :
                 presenter.selectedItemPos = layoutPosition
                 presenter.notifyItemChanged(presenter.selectedItemPos)
             }
+        }
+
+        override fun editClicked() {
+            expandEditCard()
+        }
+
+        override fun editDoneClicked() {
+            collapseEditCard()
         }
 
         private fun expandEditCard() {

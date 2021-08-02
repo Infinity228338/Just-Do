@@ -36,6 +36,14 @@ class TasksAdapter(val presenter: TaskListPresenter) :
 
         }
 
+        override fun editClicked() {
+            TODO("Not yet implemented")
+        }
+
+        override fun editDoneClicked() {
+            TODO("Not yet implemented")
+        }
+
         override var pos: Int = -1
 
     }
