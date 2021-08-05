@@ -21,4 +21,7 @@ interface TaskDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun retain(task: Task): Single<Long>
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun update(task: Task): Completable
 }

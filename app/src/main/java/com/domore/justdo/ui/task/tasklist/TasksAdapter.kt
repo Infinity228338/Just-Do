@@ -3,6 +3,7 @@ package com.domore.justdo.ui.task.tasklist
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.domore.justdo.data.vo.ModeType
 import com.domore.justdo.data.vo.Task
 import com.domore.justdo.databinding.ItemTaskBinding
 import com.domore.justdo.ui.task.TaskItemView
@@ -41,6 +42,10 @@ class TasksAdapter(val presenter: TaskListPresenter) :
         }
 
         override fun editDoneClicked() {
+            TODO("Not yet implemented")
+        }
+
+        override fun modeClicked(modeType: ModeType) {
             TODO("Not yet implemented")
         }
 

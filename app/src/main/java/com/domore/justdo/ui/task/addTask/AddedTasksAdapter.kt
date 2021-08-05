@@ -5,12 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionManager
 import com.domore.justdo.R
+import com.domore.justdo.data.vo.ModeType
 import com.domore.justdo.data.vo.Task
 import com.domore.justdo.data.vo.TimeTypes
 import com.domore.justdo.databinding.ItemTaskOnelineBinding
 import com.domore.justdo.ui.task.TaskItemView
+import com.domore.justdo.util.getDateFormatted
+import com.domore.justdo.util.getTimeFormatted
 
 class AddedTasksAdapter(val presenter: AddedTasksListPresenter) :
     RecyclerView.Adapter<AddedTasksAdapter.ViewHolder>() {
@@ -28,70 +33,55 @@ class AddedTasksAdapter(val presenter: AddedTasksListPresenter) :
             itemView.setOnClickListener {
                 presenter.itemClickListener?.invoke(this)
             }
+            binding.taskName.setOnClickListener {
+                presenter.itemClickListener?.invoke(this)
+            }
             binding.editIcon.setOnClickListener {
                 presenter.editClickListener?.invoke(this)
             }
             binding.editDoneIcon.setOnClickListener {
                 presenter.editDoneClickListener?.invoke(this)
             }
-            binding.apply {
-                taskName.setOnClickListener {
-                    presenter.notifyItemChanged(presenter.selectedItemPos)
-                    presenter.selectedItemPos = layoutPosition
-                    presenter.notifyItemChanged(presenter.selectedItemPos)
-                }
+            binding.deleteIcon.setOnClickListener {
+                presenter.deleteClickListener?.invoke(this)
+            }
+            binding.textModeInterval.setOnClickListener {
+                presenter.selectedModeChangedListener?.invoke(this, ModeType.INTERVAL)
+            }
+            binding.textModeTimer.setOnClickListener {
+                presenter.selectedModeChangedListener?.invoke(this, ModeType.TIMER)
 
-                deleteIcon.setOnClickListener {
-                    presenter.deleteIconClick(pos)
+            }
+            binding.textModePrecise.setOnClickListener {
+                presenter.selectedModeChangedListener?.invoke(this, ModeType.PRECISE_TIME)
+            }
+            listOf(binding.textStart, binding.timeStart).forEach {
+                it.setOnClickListener {
+                    presenter.timeClicked(TimeTypes.INTERVAL_START)
                 }
-                listOf(textStart, timeStart).forEach {
-                    it.setOnClickListener {
-                        presenter.timeClicked(TimeTypes.INTERVAL_START)
-                    }
+            }
+            listOf(binding.textEnd, binding.timeEnd).forEach {
+                it.setOnClickListener {
+                    presenter.timeClicked(TimeTypes.INTERVAL_END)
                 }
-                listOf(textEnd, timeEnd).forEach {
-                    it.setOnClickListener {
-                        presenter.timeClicked(TimeTypes.INTERVAL_END)
-                    }
+            }
+            listOf(binding.textDuration, binding.timeTimer).forEach {
+                it.setOnClickListener {
+                    presenter.timeClicked(TimeTypes.TIMER)
                 }
-                listOf(textDuration, timeTimer).forEach {
-                    it.setOnClickListener {
-                        presenter.timeClicked(TimeTypes.TIMER)
-                    }
+            }
+            listOf(binding.textPrecise, binding.timePrecise).forEach {
+                it.setOnClickListener {
+                    presenter.timeClicked(TimeTypes.PRECISE_TIME)
                 }
-                listOf(textPrecise, timePrecise).forEach {
-                    it.setOnClickListener {
-                        presenter.timeClicked(TimeTypes.PRECISE_TIME)
-                    }
-                }
+            }
 
-//                listOf(editDoneIcon).forEach {
-//                    it.setOnClickListener {
-//                        presenter.modifyClicked(taskName.text.toString())
-////                        collapseEditCard()
-//
-//                    }
-//                }
-
-                listOf(timeIcon, textModeSelector).forEach {
-                    it.setOnClickListener {
-//                        val visibility = getVisibility(true)
-//                        val text =
-//                            itemView.context
-//                                .getString(if (true) R.string.choose_mode else R.string.mode_and_time)
-//                        TransitionManager.beginDelayedTransition(binding.cardTask)
-//                        modeViews.forEach { view ->
-//                            view.visibility = visibility
-//                        }
-//                        binding.textModeSelector.text = text
-                    }
-                }
-                listOf(calendarIcon, textDate, textDateSelected).forEach {
-                    it.setOnClickListener { presenter.dateClicked() }
-                }
+            listOf(binding.calendarIcon, binding.textDate, binding.textDateSelected).forEach {
+                it.setOnClickListener { presenter.dateClicked() }
             }
         }
     }
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         presenter.bindView(holder
@@ -118,39 +108,62 @@ class AddedTasksAdapter(val presenter: AddedTasksListPresenter) :
             binding.barrier,
             binding.calendarIcon,
             binding.textDate,
+            binding.textDateSelected
         )
 
-        private val modeViews = listOf(
-            binding.textModeInterval, binding.textModeTimer, binding.textModePrecise
+        private val timeViews = listOf(
+            binding.textStart,
+            binding.timeStart,
+            binding.textEnd,
+            binding.timeEnd,
+            binding.textDuration,
+            binding.timeTimer,
+            binding.textPrecise,
+            binding.timePrecise
         )
         private val isCurrent: Boolean
             get() = presenter.selectedItemPos == layoutPosition
 
         private val itemVisibility: Int
             get() {
-                return if (isCurrent) {
+                return if (isCurrent && !binding.editDoneIcon.isVisible) {
                     View.VISIBLE
                 } else {
                     View.GONE
                 }
             }
 
-        private val expanded: Boolean
-            get() = binding.editDoneIcon.visibility == View.VISIBLE
+        private var modeType: ModeType = ModeType.INTERVAL
 
         override fun bind(task: Task) {
-            if (!isCurrent && expanded)
+            if (!isCurrent)
                 collapseEditCard()
-            binding.taskName.setText(task.name)
             task.iconResId?.let { binding.taskIcon.setImageResource(it) }
             val back = AppCompatResources.getDrawable(
                 itemView.context, if (isCurrent)
                     R.drawable.background_rounded_white
                 else R.drawable.background_rounded_ultragrey
             )
-            binding.root.background = back
-            binding.editIcon.visibility = itemVisibility
-            binding.deleteIcon.visibility = itemVisibility
+            binding.apply {
+                taskName.setText(task.name)
+                timeStart.text = task.timeStart?.getTimeFormatted()
+                timeEnd.text = task.timeEnd?.getTimeFormatted()
+                timeTimer.text = task.timerTime
+                timePrecise.text = task.timeStart?.getTimeFormatted()
+                textDateSelected.text = task.date?.getDateFormatted()
+                root.background = back
+                editIcon.visibility = itemVisibility
+                deleteIcon.visibility = itemVisibility
+                modeType = task.mode?.let { ModeType.valueOf(it) } ?: ModeType.INTERVAL
+                taskTime.text = when (modeType) {
+                    ModeType.INTERVAL -> (task.timeStart?.getTimeFormatted() ?: "") +
+                            "-" +
+                            (task.timeEnd?.getTimeFormatted() ?: "")
+                    ModeType.TIMER -> task.timerTime ?: ""
+                    ModeType.PRECISE_TIME -> task.timeStart?.getTimeFormatted() ?: ""
+                }
+
+            }
         }
 
         override fun itemClicked(task: Task) {
@@ -169,7 +182,54 @@ class AddedTasksAdapter(val presenter: AddedTasksListPresenter) :
             collapseEditCard()
         }
 
+        override fun modeClicked(modeType: ModeType) {
+            hideAllTimes()
+            processModeClick(modeType)
+        }
+
+        private fun processModeClick(modeType: ModeType) {
+            binding.let {
+                TransitionManager.beginDelayedTransition(it.cardTask)
+                val color = itemView.context.resources.getColor(R.color.main_green)
+                when (modeType) {
+                    ModeType.INTERVAL -> {
+                        it.textModeInterval.setTextColor(color)
+                        it.textStart.visibility = View.VISIBLE
+                        it.timeStart.visibility = View.VISIBLE
+                        it.textEnd.visibility = View.VISIBLE
+                        it.timeEnd.visibility = View.VISIBLE
+                    }
+                    ModeType.TIMER -> {
+                        it.textModeTimer.setTextColor(color)
+                        it.textDuration.visibility = View.VISIBLE
+                        it.timeTimer.visibility = View.VISIBLE
+                    }
+                    ModeType.PRECISE_TIME -> {
+                        it.textModePrecise.setTextColor(color)
+                        it.textPrecise.visibility = View.VISIBLE
+                        it.timePrecise.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
+
+
+        private fun hideAllTimes() {
+            binding.let {
+                TransitionManager.beginDelayedTransition(it.cardTask)
+                timeViews.forEach { view ->
+                    view.visibility = View.GONE
+                }
+                itemView.context.resources.getColor(R.color.main_green_light).let { color ->
+                    it.textModeInterval.setTextColor(color)
+                    it.textModeTimer.setTextColor(color)
+                    it.textModePrecise.setTextColor(color)
+                }
+            }
+        }
+
         private fun expandEditCard() {
+            TransitionManager.beginDelayedTransition(binding.root)
             editingViews.forEach {
                 it.visibility = View.VISIBLE
             }
@@ -177,17 +237,20 @@ class AddedTasksAdapter(val presenter: AddedTasksListPresenter) :
                 it.visibility = View.GONE
             }
             binding.taskName.inputType = InputType.TYPE_CLASS_TEXT
+            modeClicked(modeType)
         }
 
         private fun collapseEditCard() {
-            editingViews.forEach {
+            TransitionManager.beginDelayedTransition(binding.root)
+            (editingViews + timeViews + binding.editDoneIcon).forEach {
                 it.visibility = View.GONE
             }
-            if (isCurrent)
+            if (isCurrent) {
                 listOf(binding.editIcon, binding.deleteIcon).forEach {
                     it.visibility = View.VISIBLE
                 }
-            binding.taskName.inputType = InputType.TYPE_NULL
+                binding.taskName.inputType = InputType.TYPE_NULL
+            }
 
         }
 

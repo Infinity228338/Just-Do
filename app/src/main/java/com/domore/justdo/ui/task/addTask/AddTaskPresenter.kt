@@ -1,7 +1,6 @@
 package com.domore.justdo.ui.task.addTask
 
 import com.domore.justdo.data.category.repository.CategoryRepository
-import com.domore.justdo.data.mode.repository.ModeRepository
 import com.domore.justdo.data.task.repository.TaskRepository
 import com.domore.justdo.data.vo.Category
 import com.domore.justdo.data.vo.ModeType
@@ -20,7 +19,6 @@ import java.util.*
 class AddTaskPresenter @AssistedInject constructor(
     private val taskRepository: TaskRepository,
     private val categoryRepository: CategoryRepository,
-    private val modeRepository: ModeRepository,
     private val schedulers: Schedulers,
     private val router: Router
 ) : MvpPresenter<AddTaskView>() {
@@ -37,16 +35,12 @@ class AddTaskPresenter @AssistedInject constructor(
 
         override var itemClickListener: ((TaskItemView) -> Unit)? = null
         override var editClickListener: ((TaskItemView) -> Unit)? = null
+        override var deleteClickListener: ((TaskItemView) -> Unit)? = null
+        override var selectedModeChangedListener: ((TaskItemView, ModeType) -> Unit)? = null
         override var editDoneClickListener: ((TaskItemView) -> Unit)? = null
 
         override fun bindView(view: TaskItemView) {
             view.bind(tasks[view.pos])
-        }
-
-        override fun deleteIconClick(pos: Int) {
-            tasks.removeAt(pos)
-            viewState.removeItem(pos)
-            viewState.changeRange(pos, tasks.size);
         }
 
         override fun notifyItemChanged(selectedItemPos: Int) {
@@ -57,7 +51,7 @@ class AddTaskPresenter @AssistedInject constructor(
             if (timeType == TimeTypes.TIMER)
                 viewState.showTimerPicker(object : TimePickerDialogFragment.OnTimeSelectedListener {
                     override fun onTimeSubmit(hours: Int, minutes: Int, seconds: Int) {
-                        timerSelected(hours, minutes, seconds)
+                        timerListSelected(hours, minutes, seconds)
                     }
                 })
             else {
@@ -84,8 +78,12 @@ class AddTaskPresenter @AssistedInject constructor(
 
 
         private fun setDate(dateAndTime: Calendar) {
-            currentTask.date = dateAndTime.time
-            viewState.drawTask(currentTask)
+            selectedTask?.let {
+                it.date = dateAndTime.time
+                updateTask(it)
+            }
+
+            viewState.notifyItemChanged(selectedItemPos)
         }
 
         private fun setTimeListItem(time: Calendar, timeTypes: TimeTypes) {
@@ -98,7 +96,18 @@ class AddTaskPresenter @AssistedInject constructor(
                     selectedTask?.timeStart = it
                     selectedTask?.timeEnd = it
                 }
-            viewState.drawTask(currentTask)
+            selectedTask?.let { updateTask(it) }
+            viewState.notifyItemChanged(selectedItemPos)
+        }
+
+        fun timerListSelected(hours: Int, minutes: Int, seconds: Int) {
+            "$hours:$minutes:$seconds".apply {
+                selectedTask?.let {
+                    it.timerTime = this
+                    updateTask(it)
+                }
+                viewState.notifyItemChanged(selectedItemPos)
+            }
         }
 
         override fun modifyClicked(name: String) {
@@ -122,8 +131,17 @@ class AddTaskPresenter @AssistedInject constructor(
         viewState.init()
         currentTask = Task()
         taskListPresenter.apply {
-            itemClickListener = { it.itemClicked(taskListPresenter.tasks[it.pos]) }
+            itemClickListener = { it.itemClicked(tasks[it.pos]) }
             editClickListener = { it.editClicked() }
+            deleteClickListener = {
+                tasks.removeAt(it.pos)
+                viewState.removeItem(it.pos)
+                viewState.changeRange(it.pos, tasks.size);
+            }
+            selectedModeChangedListener = { view, type ->
+                tasks[view.pos].mode = type.name
+                view.modeClicked(type)
+            }
             editDoneClickListener = { it.editDoneClicked() }
         }
     }
@@ -167,14 +185,7 @@ class AddTaskPresenter @AssistedInject constructor(
     }
 
     fun modeClicked(modeType: ModeType) {
-        disposables.add(
-            modeRepository
-                .getModeByName(modeType.name)
-                .observeOn(schedulers.background())
-                .subscribeOn(schedulers.background())
-                .subscribe { mode -> currentTask.modeId = mode.id }
-        )
-
+        currentTask.mode = modeType.name
         viewState.hideAllTimes()
         viewState.processModeClick(modeType)
         viewState.drawTask(currentTask)
@@ -204,7 +215,17 @@ class AddTaskPresenter @AssistedInject constructor(
         }
         collapseCard()
         currentTask = Task()
+        viewState.drawTask(currentTask)
         currentCategory = null
+    }
+
+    private fun updateTask(task: Task) {
+        task.let {
+            taskRepository.update(it)
+                .subscribeOn(schedulers.background())
+                .observeOn(schedulers.background())
+                .subscribe()
+        }
     }
 
     fun timeClicked(timeTypes: TimeTypes) {

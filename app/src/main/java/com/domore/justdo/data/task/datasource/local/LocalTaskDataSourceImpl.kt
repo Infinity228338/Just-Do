@@ -2,6 +2,7 @@ package com.domore.justdo.data.task.datasource.local
 
 import com.domore.justdo.data.vo.Task
 import com.domore.justdo.storage.JustDoDatabase
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
@@ -23,5 +24,7 @@ class LocalTaskDataSourceImpl
             .flatMap {
                 getTaskById(id = it)
             }
+
+    override fun update(task: Task): Completable = taskDao.update(task)
 
 }
