@@ -17,6 +17,7 @@ import com.domore.justdo.ui.base.*
 import com.domore.justdo.ui.task.addTask.timepicker.TimePickerDialogFragment
 import com.domore.justdo.util.getDateFormatted
 import com.domore.justdo.util.getTimeFormatted
+import com.google.android.material.transition.MaterialContainerTransform
 import moxy.ktx.moxyPresenter
 import java.util.*
 import javax.inject.Inject
@@ -44,6 +45,7 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
             categoryId = it.getLong(ARG_CATEGORY_ID)
             presenter.setCategory(categoryId!!)
         }
+        sharedElementEnterTransition = MaterialContainerTransform()
     }
 
     override fun onCreateView(

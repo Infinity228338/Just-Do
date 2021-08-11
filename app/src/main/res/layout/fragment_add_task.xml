@@ -8,6 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:transitionName="shared_element_container"
     app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
     tools:context=".ui.task.addTask.AddTaskFragment">
 
