@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:transitionName="shared_element_container"
     tools:context=".ui.categories.CategoriesFragment">
 
     <TextView
@@ -18,6 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/bottom_nav_height"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="4"
         tools:listitem="@layout/item_category" />

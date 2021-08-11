@@ -2,43 +2,44 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_task"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/task_item_size_oneline"
-    android:layout_margin="10dp">
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_rounded_ultragrey">
 
     <ImageView
         android:id="@+id/task_icon"
         android:layout_width="@dimen/category_icon_size"
         android:layout_height="@dimen/category_icon_size"
         android:layout_margin="3dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
-    <TextView
+    <EditText
         android:id="@+id/task_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/task_time"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:inputType="none"
+        android:singleLine="true"
+        android:textColor="@color/main_green"
         app:layout_constraintStart_toEndOf="@+id/task_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/cities" />
 
     <TextView
         android:id="@+id/task_time"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/task_name"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/cities" />
+        tools:text="@tools:sample/date/hhmmss" />
 
     <ImageView
         android:id="@+id/edit_icon"
@@ -46,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
         android:src="@drawable/ic_icon_edit"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/delete_icon"
         app:layout_constraintTop_toTopOf="parent" />
@@ -56,9 +58,212 @@
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
         android:src="@drawable/ic_icon_delete"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/edit_done_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_icon_check"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/time_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:src="@drawable/ic_icon_timer"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/task_icon" />
+
+    <TextView
+        android:id="@+id/text_mode_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/mode_and_time"
+        android:textColor="@color/main_green"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/time_icon"
+        app:layout_constraintTop_toBottomOf="@+id/task_icon" />
+
+    <TextView
+        android:id="@+id/text_mode_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        android:text="@string/text_interval"
+        android:textColor="@color/main_green"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/text_mode_timer"
+        app:layout_constraintStart_toEndOf="@+id/time_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_mode_selector" />
+
+    <TextView
+        android:id="@+id/text_mode_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="25dp"
+        android:text="@string/text_timer"
+        android:textColor="@color/main_green_light"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/text_mode_precise"
+        app:layout_constraintStart_toEndOf="@+id/text_mode_interval"
+        app:layout_constraintTop_toBottomOf="@+id/text_mode_selector" />
+
+    <TextView
+        android:id="@+id/text_mode_precise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        android:text="@string/text_precise_time"
+        android:textColor="@color/main_green_light"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_mode_timer"
+        app:layout_constraintTop_toBottomOf="@+id/text_mode_selector" />
+
+    <TextView
+        android:id="@+id/text_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/text_start"
+        android:textColor="@color/main_green"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/text_mode_interval"
+        app:layout_constraintTop_toBottomOf="@+id/text_mode_interval" />
+
+    <TextView
+        android:id="@+id/time_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/text_start"
+        app:layout_constraintTop_toBottomOf="@+id/text_mode_interval"
+        tools:text="@tools:sample/date/hhmmss" />
+
+    <TextView
+        android:id="@+id/text_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/text_end"
+        android:textColor="@color/main_green"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/text_start"
+        app:layout_constraintTop_toBottomOf="@+id/text_start" />
+
+    <TextView
+        android:id="@+id/time_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/text_end"
+        app:layout_constraintTop_toBottomOf="@+id/text_start"
+        tools:text="@tools:sample/date/hhmmss" />
+
+    <TextView
+        android:id="@+id/text_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/text_duration"
+        android:textColor="@color/main_green"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/text_mode_interval"
+        app:layout_constraintTop_toBottomOf="@+id/text_mode_interval" />
+
+    <TextView
+        android:id="@+id/time_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/text_duration"
+        app:layout_constraintTop_toBottomOf="@+id/text_mode_precise"
+        tools:text="@tools:sample/date/hhmmss" />
+
+    <TextView
+        android:id="@+id/text_precise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/text_precise"
+        android:textColor="@color/main_green"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/text_mode_interval"
+        app:layout_constraintTop_toBottomOf="@+id/text_mode_interval" />
+
+    <TextView
+        android:id="@+id/time_precise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/text_precise"
+        app:layout_constraintTop_toBottomOf="@+id/text_mode_interval"
+        tools:text="@tools:sample/date/hhmmss" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="task_icon,time_precise,time_timer,time_end,text_mode_interval" />
+
+    <ImageView
+        android:id="@+id/calendar_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_icon_calendar"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier" />
+
+    <TextView
+        android:id="@+id/text_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/text_date"
+        android:textColor="@color/main_green"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/calendar_icon"
+        app:layout_constraintTop_toBottomOf="@+id/barrier" />
+
+    <TextView
+        android:id="@+id/text_date_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/text_date"
+        app:layout_constraintTop_toBottomOf="@+id/barrier"
+        tools:text="@tools:sample/date/ddmmyy" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

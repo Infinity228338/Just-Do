@@ -2,6 +2,7 @@ package com.domore.justdo.data.task.repository
 
 import com.domore.justdo.data.task.datasource.local.LocalTaskDataSource
 import com.domore.justdo.data.vo.Task
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
@@ -18,5 +19,7 @@ class TaskRepositoryImpl
 
     override fun saveTask(task: Task): Single<Task> =
         localTaskDataSource.saveTask(task)
+
+    override fun update(task: Task): Completable = localTaskDataSource.update(task)
 
 }

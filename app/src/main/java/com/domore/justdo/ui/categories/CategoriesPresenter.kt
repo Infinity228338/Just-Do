@@ -47,7 +47,8 @@ class CategoriesPresenter @AssistedInject constructor(
                 showDialog()
             } else {
                 val category = categoryListPresenter.categories[itemView.pos]
-                router.navigateTo(screens.addTaskScreen(category.id))
+                router.sendResult("kek_lol", category.id)
+                router.exit()
             }
         }
     }

@@ -5,4 +5,7 @@ import moxy.viewstate.strategy.alias.SingleState
 
 @SingleState
 interface TaskListView : MvpView {
+    fun init()
+    fun updateList()
+    fun hidetext()
 }

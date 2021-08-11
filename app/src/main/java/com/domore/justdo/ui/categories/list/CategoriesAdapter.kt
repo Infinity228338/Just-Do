@@ -2,11 +2,13 @@ package com.domore.justdo.ui.categories.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.domore.justdo.R
 import com.domore.justdo.data.vo.Category
 import com.domore.justdo.databinding.ItemCategoryBinding
+import com.domore.justdo.ui.base.getResColor
 
 class CategoriesAdapter(val presenter: CategoriesListPresenter) :
     RecyclerView.Adapter<CategoriesAdapter.CategoryViewHolder>() {
@@ -42,16 +44,27 @@ class CategoriesAdapter(val presenter: CategoriesListPresenter) :
                 category.name ?: itemView.context.getString(category.nameRes)
             val iconRes =
                 if (category.iconResId == 0) R.drawable.ic_icon_list else category.iconResId
-            binding.categoryIcon.also {
-                it.setImageDrawable(
-                    AppCompatResources.getDrawable(
+            val drawable = AppCompatResources.getDrawable(
+                itemView.context,
+                R.drawable.circle_back
+            )?.apply {
+                if (category.backgroundColorResId != 0) setTint(
+                    getResColor(
                         itemView.context,
-                        iconRes
+                        category.backgroundColorResId
                     )
                 )
-                it.setOnClickListener {
-                    presenter.itemClickListener?.invoke(this)
+            }
+
+            binding.apply {
+                categoryIcon.setImageResource(iconRes)
+                if (category.backgroundColorResId != 0) {
+                    categoryIcon.background = drawable
+                    categoryIcon.scaleType = ImageView.ScaleType.CENTER_INSIDE
                 }
+            }
+            binding.categoryIcon.setOnClickListener {
+                presenter.itemClickListener?.invoke(this)
             }
         }
 

@@ -7,10 +7,6 @@ import java.util.*
 
 @Entity(
     foreignKeys = [ForeignKey(
-        entity = Mode::class,
-        parentColumns = ["id"],
-        childColumns = ["modeId"]
-    ), ForeignKey(
         entity = Category::class,
         parentColumns = ["id"],
         childColumns = ["categoryId"]
@@ -19,15 +15,17 @@ import java.util.*
 data class Task(
     @PrimaryKey(autoGenerate = true) val id: Long,
     var name: String?,
-    var modeId: Long?,
+    var mode: String?,
     var categoryId: Long?,
+    var iconResId: Int?,
     var date: Date?,
     var timeStart: Date?,
     var timeEnd: Date?,
-    var period: String?
+    var timerTime: String?
 ) {
     constructor() : this(
         0,
+        null,
         null,
         null,
         null,

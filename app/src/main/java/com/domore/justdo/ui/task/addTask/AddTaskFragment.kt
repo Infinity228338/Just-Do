@@ -10,10 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
 import com.domore.justdo.R
 import com.domore.justdo.data.vo.ModeType
+import com.domore.justdo.data.vo.Task
 import com.domore.justdo.data.vo.TimeTypes
 import com.domore.justdo.databinding.FragmentAddTaskBinding
 import com.domore.justdo.ui.base.*
 import com.domore.justdo.ui.task.addTask.timepicker.TimePickerDialogFragment
+import com.domore.justdo.util.getDateFormatted
+import com.domore.justdo.util.getTimeFormatted
+import com.google.android.material.transition.MaterialContainerTransform
 import moxy.ktx.moxyPresenter
 import java.util.*
 import javax.inject.Inject
@@ -21,8 +25,7 @@ import javax.inject.Inject
 
 const val ARG_CATEGORY_ID = "category_id"
 
-class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, BackButtonListener,
-    TimePickerDialogFragment.OnTimeSelectedListener {
+class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, BackButtonListener {
 
     @Inject
     lateinit var addTaskPresenterFactory: AddTaskPresenterFactory
@@ -32,6 +35,9 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
         addTaskPresenterFactory.create()
     }
     private var adapter: AddedTasksAdapter? = null
+    lateinit var cardViews: List<View>
+    lateinit var modeViews: List<View>
+    lateinit var timeViews: List<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +45,7 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
             categoryId = it.getLong(ARG_CATEGORY_ID)
             presenter.setCategory(categoryId!!)
         }
+        sharedElementEnterTransition = MaterialContainerTransform()
     }
 
     override fun onCreateView(
@@ -48,9 +55,34 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
         activity?.title = getString(R.string.add_task)
         adapter = AddedTasksAdapter(presenter.taskListPresenter)
         viewBinding = FragmentAddTaskBinding.inflate(inflater, container, false)
-        viewBinding?.rvNewTasks?.also {
-            it.layoutManager = LinearLayoutManager(context)
-            it.adapter = adapter
+        viewBinding?.apply {
+            cardViews = listOf(
+                timeIcon,
+                textModeSelector,
+                barrier,
+                calendarIcon,
+                textDate,
+                textDateSelected,
+                textCancel,
+                textOk
+            )
+            modeViews = listOf(
+                textModeInterval, textModeTimer, textModePrecise
+            )
+            timeViews = listOf(
+                textStart,
+                timeStart,
+                textEnd,
+                timeEnd,
+                textDuration,
+                timeTimer,
+                textPrecise,
+                timePrecise
+            )
+            rvNewTasks.also {
+                it.layoutManager = LinearLayoutManager(context)
+                it.adapter = adapter
+            }
         }
         return viewBinding!!.root
     }
@@ -67,222 +99,204 @@ class AddTaskFragment : BaseFragment(R.layout.fragment_add_task), AddTaskView, B
 
     override fun init() {
         viewBinding?.apply {
-            cardTaskName.setOnClickListener {
-                presenter.cardTaskNameClicked()
+            cardTask.setOnClickListener {
+                presenter.expandCard()
             }
             editTaskName.apply {
                 setOnFocusChangeListener { _, hasFocus ->
-                    if (hasFocus)
-                        presenter.cardTaskNameClicked()
-                    else {
+                    if (!hasFocus)
                         hideKeyboard()
-                    }
+                    else
+                        presenter.expandCard()
                 }
                 setOnClickListener {
-                    presenter.cardTaskNameClicked()
+                    presenter.expandCard()
                 }
-
             }
 
-            cardTaskMode.setOnClickListener {
-                presenter.cardTaskModeClicked()
-            }
-            textInterval.setOnClickListener {
+            textModeInterval.setOnClickListener {
                 presenter.modeClicked(ModeType.INTERVAL)
             }
-            textTimer.setOnClickListener {
+            textModeTimer.setOnClickListener {
                 presenter.modeClicked(ModeType.TIMER)
             }
-            textPreciseTime.setOnClickListener {
+            textModePrecise.setOnClickListener {
                 presenter.modeClicked(ModeType.PRECISE_TIME)
             }
-            cardTaskDate.setOnClickListener {
-                presenter.dateClicked()
+
+
+            listOf(textStart, timeStart).forEach {
+                it.setOnClickListener { presenter.timeClicked(TimeTypes.INTERVAL_START) }
             }
-            timeStart.setOnClickListener {
-                presenter.timeStartClicked()
+            listOf(textEnd, timeEnd).forEach {
+                it.setOnClickListener { presenter.timeClicked(TimeTypes.INTERVAL_END) }
             }
-            timeEnd.setOnClickListener {
-                presenter.timeEndClicked()
+            listOf(textDuration, timeTimer).forEach {
+                it.setOnClickListener { presenter.timeClicked(TimeTypes.TIMER) }
             }
-            timeDuration.setOnClickListener {
-                presenter.timeDurationClicked()
+            listOf(textPrecise, timePrecise).forEach {
+                it.setOnClickListener { presenter.timeClicked(TimeTypes.PRECISE_TIME) }
             }
 
-            timePrecise.setOnClickListener {
-                presenter.timePreciseClicked()
+            listOf(textOk, addIcon).forEach {
+                it.setOnClickListener { presenter.addClicked(editTaskName.text.toString()) }
             }
+
             textCancel.setOnClickListener {
                 presenter.backPressed()
             }
 
-            textOk.setOnClickListener {
-                presenter.okClicked(editTaskName.text.toString())
+            listOf(timeIcon, textModeSelector).forEach {
+                it.setOnClickListener { presenter.modeSelectorClicked() }
+            }
+            listOf(calendarIcon, textDate, textDateSelected).forEach {
+                it.setOnClickListener { presenter.dateClicked() }
             }
         }
     }
 
-    override fun processModeClick(modeType: ModeType, formatted: String) {
+    override fun expandOrCollapseCard(cardTaskNameExpanded: Boolean) {
+        val color =
+            getResColor(
+                requireContext(),
+                if (cardTaskNameExpanded) R.color.white else R.color.ultra_light_grey
+            )
+        val visibility = getVisibility(cardTaskNameExpanded)
+        val addIconRes =
+            if (cardTaskNameExpanded) R.drawable.ic_icon_check else R.drawable.ic_add_inactive
+        val itemsIconRes =
+            if (cardTaskNameExpanded) R.drawable.ic_icon_name else R.drawable.ic_icon_list
+        viewBinding?.apply {
+            TransitionManager.beginDelayedTransition(addTaskView)
+            cardTask.setCardBackgroundColor(color)
+            addIcon.setImageResource(addIconRes)
+            itemsIcon.setImageResource(itemsIconRes)
+            if (!cardTaskNameExpanded) timeViews.forEach { it.visibility = visibility }
+            if (!cardTaskNameExpanded) modeViews.forEach { it.visibility = visibility }
+            cardViews.forEach { it.visibility = visibility }
+            editTaskName.also {
+                if (!cardTaskNameExpanded) hideKeyboard()
+                it.isCursorVisible = cardTaskNameExpanded
+            }
+        }
+    }
+
+    override fun showOrHideModes(modesExpanded: Boolean) {
+        val visibility = getVisibility(modesExpanded)
+        val text =
+            requireContext()
+                .getString(if (modesExpanded) R.string.choose_mode else R.string.mode_and_time)
         viewBinding?.let {
-            TransitionManager.beginDelayedTransition(it.cardTaskMode)
+            TransitionManager.beginDelayedTransition(it.cardTask)
+            modeViews.forEach { view ->
+                view.visibility = visibility
+            }
+            it.textModeSelector.text = text
+        }
+    }
+
+    override fun processModeClick(modeType: ModeType) {
+        viewBinding?.let {
+            TransitionManager.beginDelayedTransition(it.cardTask)
             val color = resources.getColor(R.color.main_green)
             when (modeType) {
                 ModeType.INTERVAL -> {
-                    it.textInterval.setTextColor(color)
+                    it.textModeInterval.setTextColor(color)
                     it.textStart.visibility = View.VISIBLE
                     it.timeStart.visibility = View.VISIBLE
-                    it.timeStart.text = formatted
                     it.textEnd.visibility = View.VISIBLE
                     it.timeEnd.visibility = View.VISIBLE
-                    it.timeEnd.text = formatted
                 }
                 ModeType.TIMER -> {
-                    it.textTimer.setTextColor(color)
+                    it.textModeTimer.setTextColor(color)
                     it.textDuration.visibility = View.VISIBLE
-                    it.timeDuration.visibility = View.VISIBLE
-                    it.timeDuration.text = formatted
+                    it.timeTimer.visibility = View.VISIBLE
                 }
                 ModeType.PRECISE_TIME -> {
-                    it.textPreciseTime.setTextColor(color)
+                    it.textModePrecise.setTextColor(color)
                     it.textPrecise.visibility = View.VISIBLE
                     it.timePrecise.visibility = View.VISIBLE
-                    it.timePrecise.text = formatted
                 }
             }
         }
     }
+
 
     override fun hideAllTimes() {
         viewBinding?.let {
-            TransitionManager.beginDelayedTransition(it.cardTaskMode)
-            it.textStart.visibility = View.GONE
-            it.timeStart.visibility = View.GONE
-            it.textEnd.visibility = View.GONE
-            it.timeEnd.visibility = View.GONE
-            it.textDuration.visibility = View.GONE
-            it.timeDuration.visibility = View.GONE
-            it.textPrecise.visibility = View.GONE
-            it.timePrecise.visibility = View.GONE
+            TransitionManager.beginDelayedTransition(it.cardTask)
+            timeViews.forEach { view ->
+                view.visibility = View.GONE
+            }
             resources.getColor(R.color.main_green_light).let { color ->
-                it.textInterval.setTextColor(color)
-                it.textTimer.setTextColor(color)
-                it.textPreciseTime.setTextColor(color)
+                it.textModeInterval.setTextColor(color)
+                it.textModeTimer.setTextColor(color)
+                it.textModePrecise.setTextColor(color)
             }
         }
     }
 
-    override fun showOrHideModes(shown: Boolean) {
-        val visibility = getVisibility(shown)
-        val text =
-            requireContext()
-                .getString(if (shown) R.string.choose_mode else R.string.mode_and_time)
-        val color =
-            getResColor(
-                requireContext(),
-                if (shown) R.color.white else R.color.ultra_light_grey
-            )
-        viewBinding?.let {
-//            TransitionManager.beginDelayedTransition(it.cardTaskMode)
-            it.textInterval.visibility = visibility
-            it.textTimer.visibility = visibility
-            it.textPreciseTime.visibility = visibility
-            it.textModeTime.text = text
-            it.cardTaskMode.setCardBackgroundColor(color)
-        }
-    }
-
-    override fun processNameCardClick(shown: Boolean) {
-        val color =
-            getResColor(
-                requireContext(),
-                if (shown) R.color.white else R.color.ultra_light_grey
-            )
-        val visibility = getVisibility(shown)
-        val addIconRes = if (shown) R.drawable.ic_icon_check else R.drawable.ic_add_inactive
-        val itemsIconRes = if (shown) R.drawable.ic_icon_name else R.drawable.ic_icon_list
+    override fun drawTask(currentTask: Task) {
         viewBinding?.apply {
-            TransitionManager.beginDelayedTransition(addTaskView)
-            cardTaskName.setCardBackgroundColor(color)
-            addIcon.setImageResource(addIconRes)
-            itemsIcon.setImageResource(itemsIconRes)
-            cardTaskMode.visibility = visibility
-            cardTaskDate.visibility = visibility
-            textCancel.visibility = visibility
-            textOk.visibility = visibility
-            editTaskName.also {
-                if (!shown) hideKeyboard()
-                it.isCursorVisible = shown
-            }
+            timeStart.text = currentTask.timeStart?.getTimeFormatted()
+            timeEnd.text = currentTask.timeEnd?.getTimeFormatted()
+            timeTimer.text = currentTask.timerTime
+            timePrecise.text = currentTask.timeStart?.getTimeFormatted()
+            textDateSelected.text = currentTask.date?.getDateFormatted()
         }
     }
-
 
     override fun addItemToList(position: Int) {
         adapter?.notifyItemInserted(position)
+        viewBinding?.editTaskName?.setText("")
     }
 
-    override fun showDatePicker(date: Calendar) {
+    override fun removeItem(pos: Int) {
+        adapter?.notifyItemRemoved(pos)
+    }
+
+    override fun notifyItemChanged(selectedItemPos: Int) {
+        adapter?.notifyItemChanged(selectedItemPos)
+    }
+
+    override fun changeRange(pos: Int, size: Int) {
+        adapter?.notifyItemRangeChanged(pos, size)
+    }
+
+    override fun showDatePicker(date: Calendar, listener: DatePickerDialog.OnDateSetListener) {
         DatePickerDialog(
             requireContext(),
-            { _, year, month, dayOfMonth ->
-                date.set(Calendar.YEAR, year)
-                date.set(Calendar.MONTH, month)
-                date.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                presenter.setDate(date)
-            },
+            listener,
             date.get(Calendar.YEAR),
             date.get(Calendar.MONTH),
             date.get(Calendar.DAY_OF_MONTH)
         ).show()
     }
 
-    override fun showTimePicker(time: Calendar, timeTypes: TimeTypes) {
+
+    override fun showTimePicker(
+        time: Calendar,
+        timeTypes: TimeTypes,
+        listener: TimePickerDialog.OnTimeSetListener
+    ) {
         val timePickerDialog = TimePickerDialog(
             requireContext(),
-            { _, hourOfDay, minute ->
-                time.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                time.set(Calendar.MINUTE, minute)
-                presenter.setTime(time, timeTypes)
-            },
+            listener,
             time[Calendar.HOUR_OF_DAY],
             time[Calendar.MINUTE],
-            false
+            true
         )
         timePickerDialog.show()
     }
 
-    override fun showTimerPicker() {
+
+    override fun showTimerPicker(listener: TimePickerDialogFragment.OnTimeSelectedListener) {
         val timePickerDialogFragment: TimePickerDialogFragment =
             TimePickerDialogFragment.newInstance()
         timePickerDialogFragment.isCancelable = true
-        timePickerDialogFragment.setTargetFragment(this, 0)
+        timePickerDialogFragment.setOnTimerClickListener(listener)
         timePickerDialogFragment.show(parentFragmentManager, "fragment_time")
     }
 
-    override fun onTimeSubmit(hours: Int, minutes: Int, seconds: Int) {
-        presenter.timerSelected(hours, minutes, seconds)
-    }
-
-    override fun setTimeStartText(formattedTime: String) {
-        viewBinding?.timeStart?.text = formattedTime
-    }
-
-    override fun setTimeEndText(formattedTime: String) {
-        viewBinding?.timeEnd?.text = formattedTime
-    }
-
-    override fun setTimerText(formattedTime: String) {
-        viewBinding?.timeDuration?.text = formattedTime
-    }
-
-    override fun setDate(dateFormatted: String) {
-        viewBinding?.textDateSelected?.text = dateFormatted
-    }
-
-    override fun setPreciseText(formattedTime: String) {
-        viewBinding?.timePrecise?.text = formattedTime
-    }
-
     override fun backPressed(): Boolean = presenter.backPressed()
-
 }

@@ -9,6 +9,7 @@ import android.view.WindowManager
 import androidx.annotation.Nullable
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.domore.justdo.R
 import com.domore.justdo.data.categorycolor.repository.CategoryColorRepository
 import com.domore.justdo.data.categoryicon.repository.CategoryIconRepository
 import com.domore.justdo.data.vo.CategoryColor
@@ -51,6 +52,7 @@ class AddCategoryFragment : DialogFragment(), HasAndroidInjector {
         } catch (e: Exception) {
             throw ClassCastException("Calling Fragment must implement OnAddFriendListener")
         }
+        setStyle(STYLE_NO_TITLE, R.style.MyDialogGreenBack);
     }
 
     override fun onAttach(context: Context) {

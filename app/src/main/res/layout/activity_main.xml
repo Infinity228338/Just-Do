@@ -11,6 +11,7 @@
         android:id="@+id/bottom_navigation_view"
         style="@style/justDoBottomNavigationView"
         android:fitsSystemWindows="true"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
         app:menu="@menu/menu_main" />
 
 </FrameLayout>
